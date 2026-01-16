@@ -17,7 +17,7 @@ void runATM(){
     int history[100];//acc num ammount history
     int count = LoadData(accnum,PIN,balance);//load data + return count at the start of the session
     for(int i = 0;i<count;i++){
-        current[i]=0;
+        current[i]=5;
         history[i]=0;
         ammount[i]=0;
     }

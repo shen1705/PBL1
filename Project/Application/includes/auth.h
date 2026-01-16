@@ -1,4 +1,4 @@
 #pragma once
 
-int ITauth(int password);
+int ITauth();
 int Userauth(int PIN);

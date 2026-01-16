@@ -14,7 +14,6 @@ void commandlist(){
         <<"  shutdown  - Shutdown ATM"<<endl;
 }
 
-
 void handlecommand(const std::string &cmd,int &running,int accnum[],int PIN[],double balance[],int count,int current[],int history[],double ammount[]){
    
     if(cmd == "help")
@@ -22,7 +21,12 @@ void handlecommand(const std::string &cmd,int &running,int accnum[],int PIN[],do
     else if (cmd=="deposit"||cmd=="withdraw"||cmd=="balance"||cmd=="history"){
         int accountnumber;
         cout<<"Please input your account number:";
-        cin>> accountnumber;
+        if (!(cin >> accountnumber)){//input bug type error
+            cout << "Invalid input! Please enter a number." << endl;
+            cin.clear();            
+            cin.ignore(1000, '\n'); 
+            return;              
+        }
         int index;
         if(search(accountnumber,accnum,count,index)){
             if(Userauth(PIN[index])){
@@ -36,10 +40,10 @@ void handlecommand(const std::string &cmd,int &running,int accnum[],int PIN[],do
         else cout<<"Can not find your account"<<endl;
     }    
     else if (cmd == "shutdown"){
-        if(ITauth)shutdown(running);
+        if(ITauth())shutdown(running);
         else cout<<"Authorization is failed"<<std::endl;
     }
-    else cout << "Unknown command. Type 'help'.";
+    else cout << "Unknown command. Type 'help'."<<endl;
 }
 
 void shutdown(int &running){
@@ -58,13 +62,13 @@ int search(int id,int accnum[],int count,int &index){
 }
 
 void ShowBalance(int index,double balance[]){   
-    cout<< "Your balance:"<<balance[index];
+    cout<< "Your balance:"<<balance[index]<<endl;
 }
 
 int withdraw(int index,double money,double balance[]){
     if(balance[index]>money){
         balance[index]-=money;
-        cout<<"withdraw successfully. Your new balance:"<<balance[index];
+        cout<<"withdraw successfully. Your new balance:"<<balance[index]<<endl;
         return 1;
     }
     else{
@@ -75,7 +79,7 @@ int withdraw(int index,double money,double balance[]){
 
 int deposit(int index,double money,double balance[]){
     balance[index]+=money;
-    cout<<"deposit successfully. Your new balance:"<<balance[index];
+    cout<<"deposit successfully. Your new balance:"<<balance[index]<<endl;
     return 1;
 }
 
@@ -84,14 +88,24 @@ void transaction(int index,double balance[],int current[],int history[],double a
         double money;
         cout<<"Your balance: "<< balance[index]<<endl;
         cout<<"Type ammount of money you want to withdraw/deposit:";
-        cin>> money;
-        cin.ignore(1000,'\n');
-        type(index,money,balance);
-            record(index,history,ammount,accnum,money);
+        if (!(cin >> money)) {//input bug type error
+            cout << "Invalid input! Please enter a number." << endl;
+            cin.clear();            
+            cin.ignore(1000, '\n');
+            return;                 
         }
-        if(type)current[index]--;
-    
-    else cout<<"Transaction limit reached";
+        int success = type(index, money, balance);
+        
+        if(success) {
+            if (type == withdraw){
+                record(index, history, ammount, accnum, -money);
+            } 
+            else{
+                record(index, history, ammount, accnum, money);
+            }
+        current[index]--;}
+    }
+    else cout<<"Transaction limit reached"<<endl;
 }
 
 void record(int index ,int history[] ,double ammount[],int accnum[],double money){
@@ -105,11 +119,11 @@ void record(int index ,int history[] ,double ammount[],int accnum[],double money
 
 void ShowHistory(int index, int history[], double ammount[],int accnum[]){
     int i =0;
+    int j =0;
     cout<<"Your transaction history:"<<endl;
     while( history[i]!=0){
-        int j =0;
         if(history[i]==accnum[index]){
-            cout<<++j<<"." <<ammount[i] << ":"<<endl;
+            cout<<++j<<"." <<ammount[i]<<endl;
             i++;
         }
     }

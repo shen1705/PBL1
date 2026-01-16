@@ -19,7 +19,7 @@ struct DataList{
 
 neu duoc su dung struct 
 */ 
-int LoadData(int accnum[],int PIN[],int balance[]){
+int LoadData(int accnum[],int PIN[],double balance[]){
     ifstream ATMDATA ("DATA/user.txt");
     if(!ATMDATA){
         return -1;
@@ -28,7 +28,7 @@ int LoadData(int accnum[],int PIN[],int balance[]){
     int count=0;
 
     while(getline(ATMDATA,line)){
-        stringstream data;
+        stringstream data(line);
         string temp;
         
         getline(data,temp,'|');//get line from data -> temp splitted by | 
@@ -42,8 +42,8 @@ int LoadData(int accnum[],int PIN[],int balance[]){
     return count;
 }
 
-int SaveData(int accnum[],int PIN[],int balance[],int count){
-    ofstream ATMDATA("user.txt");
+int SaveData(int accnum[],int PIN[],double balance[],int count){
+    ofstream ATMDATA("DATA/user.txt");
     if(!ATMDATA)return -1;
     for(int i=0;i<count;i++){
         ATMDATA << accnum[i]<<"|"<<PIN[i]<<"|"<<balance[i]<<endl;
@@ -53,7 +53,7 @@ int SaveData(int accnum[],int PIN[],int balance[],int count){
 }
 
 int Record(int history[],double ammount[]){
-    ofstream record("record.txt",ios::app);
+    ofstream record("DATA/record.txt",ios::app);
         if(!record)return -1;
         int i = 0 ;
         while(history[i]!=0){
@@ -61,4 +61,5 @@ int Record(int history[],double ammount[]){
             i++;
         }
     record.close();
-    }
+    return 1;
+}

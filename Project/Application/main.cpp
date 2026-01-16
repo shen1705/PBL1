@@ -1,10 +1,10 @@
-#include "Application\includes\\atm_controll.h"
-#include "Application\includes\auth.h"
+#include "includes/atm_control.h"
+#include "includes/auth.h"
 #include <iostream>
 
 
 int main() {
-    if(ITauth)
+    if(ITauth())
         runATM();
     else  std::cout<<"Authorization is failed"<<std::endl;
     return 0;
