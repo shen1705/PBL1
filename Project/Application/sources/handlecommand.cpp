@@ -6,12 +6,14 @@ using namespace std;
 
 
 void commandlist(){
+    cout<<"========================================"<<endl;
     cout<<  "  deposit   - Deposit money"<<endl
         <<"  withdraw  - Withdraw money"<<endl
         <<"  balance   - Show balance"<<endl
         <<"  history   - Show transactions"<<endl
         <<"  help      - Show this list"<<endl
         <<"  shutdown  - Shutdown ATM"<<endl;
+    cout<<"========================================"<<endl;
 }
 
 void handlecommand(const std::string &cmd,int &running,int accnum[],int PIN[],double balance[],int count,int current[],int history[],double ammount[]){
@@ -83,11 +85,13 @@ int deposit(int index,double money,double balance[]){
     return 1;
 }
 
-void transaction(int index,double balance[],int current[],int history[],double ammount[],int (*type)(int,double,double*),int accnum[]){
-    if(current[index]!=0){
+void transaction(int index,double balance[],int maxtrans[],int history[],double ammount[],int (*type)(int,double,double*),int accnum[]){
+    if(maxtrans[index]!=0){
         double money;
-        cout<<"Your balance: "<< balance[index]<<endl;
-        cout<<"Type ammount of money you want to withdraw/deposit:";
+        cout<<"Account:"<<accnum[index]<<endl;
+        cout<<"Your current balance: "<< balance[index]<<endl;
+        cout<<"------------------------------------"<<endl;
+        cout<<"Enter ammount: ";
         if (!(cin >> money)) {//input bug type error
             cout << "Invalid input! Please enter a number." << endl;
             cin.clear();            
@@ -103,7 +107,7 @@ void transaction(int index,double balance[],int current[],int history[],double a
             else{
                 record(index, history, ammount, accnum, money);
             }
-        current[index]--;}
+        maxtrans[index]--;}
     }
     else cout<<"Transaction limit reached"<<endl;
 }

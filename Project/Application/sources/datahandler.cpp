@@ -19,10 +19,19 @@ struct DataList{
 
 neu duoc su dung struct 
 */ 
+int UserCount(){
+    ifstream DATA("DATA/User.txt");
+    if(!DATA)return -1;
+    int count=0;
+    string line;
+    while(getline(DATA,line))
+        count++;
+    return count;
+}
 int LoadData(int accnum[],int PIN[],double balance[]){
     ifstream ATMDATA ("DATA/user.txt");
     if(!ATMDATA){
-        return -1;
+        return 0;
     }
     string line;
     int count=0;
@@ -39,7 +48,7 @@ int LoadData(int accnum[],int PIN[],double balance[]){
         balance[count]=stod(temp);
         count++;
     }
-    return count;
+    return 1;
 }
 
 int SaveData(int accnum[],int PIN[],double balance[],int count){
