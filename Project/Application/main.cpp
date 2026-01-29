@@ -1,5 +1,5 @@
-#include "includes/atm_control.h"
-#include "includes/auth.h"
+#include "atm_control.h"
+#include "auth.h"
 #include <iostream>
 
 

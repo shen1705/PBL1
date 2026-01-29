@@ -1,5 +1,5 @@
-#include "Application/includes/handlecommand.h"
-#include "Application/includes/auth.h"
+#include "handlecommand.h"
+#include "auth.h"
 #include <iostream>
 #include <string>
 using namespace std;
