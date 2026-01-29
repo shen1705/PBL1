@@ -1,6 +1,5 @@
 #pragma once
 
-int UserCount();
-int SaveData(int accnum[],int PIN[],double balance[],int count);
-int LoadData(int accnum[],int PIN[],double balance[]);
-int Record(int history[],double ammount[]);
+void SaveData(unordered_map<int,User>& accounts);
+int LoadData(unordered_map<int,User>& accounts);
+int Record(TransactionList Record);

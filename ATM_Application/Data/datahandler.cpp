@@ -45,14 +45,14 @@ void SaveData(unordered_map<int,User>& accounts){
     ATMDATA.close();
 }
 
-int Record(int history[],double ammount[]){
+int Record(TransactionList *Record){
     ofstream record("DATA/record.txt",ios::app);
         if(!record)return -1;
-        int i = 0 ;
-        while(history[i]!=0){
-            record << history[i]<< ":"<<ammount[i]<<"|";
-            i++;
+        while(Record != NULL){
+            record << Record->accnum<< ":"<<Record->ammount<<"|";
+            Record= Record->next;
         }
     record.close();
     return 1;
 }
+

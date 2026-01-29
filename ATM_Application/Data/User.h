@@ -8,3 +8,8 @@ struct User{// User Node
 
 };
 
+struct TransactionList{
+    TransactionList *next;
+    double ammount;
+    int accnum;
+};

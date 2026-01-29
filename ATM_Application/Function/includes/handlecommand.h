@@ -4,21 +4,21 @@
 
 // basic
 void commandlist();
-void handlecommand(const std::string &cmd, int &running, int accnum[], int PIN[], double balance[], int count, int current[], int history[], double ammount[]);
+void handlecommand(const std::string &cmd, int &running,unordered_map<int,User>& accounts);
 void shutdown(int &running);
 
 // Data 
-int search(int id, int accnum[], int count, int &index);
-void ShowBalance(int index, double balance[]);
-void ShowHistory(int index, int history[], double ammount[], int accnum[]);
+int search();
+void ShowBalance();
+void ShowHistory();
 
 // Transaction type
-int withdraw(int index, double money, double balance[]);
-int deposit(int index, double money, double balance[]);
+int withdraw(User U,double money,double balance[]);
+int deposit(User U,double money,double balance[]);
 
 // Transaction
-void transaction(int index, double balance[], int current[], int history[], double ammount[], int (*type)(int, double, double*), int accnum[]);
+void transaction(User U,int (*type)(User,double,double));
 
 // Record
-void record(int index, int history[], double ammount[], int accnum[], double money);
+void record( );
 
