@@ -44,7 +44,7 @@ void drawMenuBox()
 
 void showMessageAndDelay() {
     cout << "Processing transaction..." << endl;
-    this_thread::sleep_for(chrono::seconds(2));
+    this_thread::sleep_for(chrono::seconds(4));
 }
 
 

@@ -128,7 +128,7 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
             U.maxtrans--;
             showMessageAndDelay();
             system("cls");
-            drawMenuBox();
+            drawHelpBox();
         }
     }
     else
