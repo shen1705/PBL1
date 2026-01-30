@@ -137,32 +137,20 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
 
 void TransUpdt(User &U, double ammount, char type)
 {
-    while (U.List->next != NULL)
-    {
-        U.List = U.List->next;
-    }
-    TransactionList *L = new TransactionList;
-    U.List->next = L;
-    L->ammount = ammount;
-    L->type = type;
+    TransactionList *newNode = new TransactionList;
+    newNode->ammount = ammount;
+    newNode->type = type;
+    newNode->next= U.List;
+    U.List=newNode;
 }
 
 void TransRecord(User &U, double ammount, SessionRecord *Record)
 {
-    if (Record != NULL)
-    {
-        while (Record->next != NULL)
-        {
-            Record = Record->next;
-            Record->accnum = U.accnum;
-            Record->ammount = ammount;
-        }
-    }
-    else
-    {
-        Record->accnum = U.accnum;
-        Record->ammount = ammount;
-    }
+    SessionRecord *newNode = new SessionRecord;
+    newNode->accnum=U.accnum;
+    newNode->ammount=ammount;
+    newNode->next = Record;
+    Record=newNode;
 }
 
 void Shutdown(int &running)

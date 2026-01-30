@@ -29,7 +29,6 @@ int LoadData(unordered_map<int,User>& accounts){
         
         getline(data,temp,'|');
         U.balance=stod(temp);
-        U.List = new TransactionList();
         accounts[U.accnum]=U;
     }
     return 1;
