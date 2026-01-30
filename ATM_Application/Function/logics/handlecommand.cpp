@@ -8,9 +8,7 @@
 
 using namespace std;
 
-
-
-void handlecommand(const string &cmd, int &running, unordered_map<int, User> &accounts, SessionRecord *Record)
+void handlecommand(const string &cmd, int &running, unordered_map<int, User> &accounts, SessionRecord *&Record)
 {
 
     if (cmd == "help")
@@ -31,9 +29,9 @@ void handlecommand(const string &cmd, int &running, unordered_map<int, User> &ac
             if (Userauth(accounts[accountnumber].PIN))
             {
                 if (cmd == "deposit")
-                    transaction(accounts[accountnumber], deposit, 'deposit', Record);
+                    transaction(accounts[accountnumber], deposit, 'd', Record);
                 else if (cmd == "withdraw")
-                    transaction(accounts[accountnumber], withdraw, 'withdraw', Record);
+                    transaction(accounts[accountnumber], withdraw, 'w', Record);
                 else if (cmd == "balance")
                     ShowBalance(accounts[accountnumber]);
                 else if (cmd == "history")
@@ -67,11 +65,17 @@ void ShowBalance(User &U)
 void ShowHistory(User &U)
 {
     int i = 1;
-    while (U.List->next != NULL)
+    TransactionList *current = U.List;
+    if (current == nullptr)
     {
-        cout << i << "." << U.List->type << U.List->ammount;
-        i++;
-        U.List = U.List->next;
+        cout << "No history was found." << endl;
+        return;
+    }
+    while (current != NULL)
+    {
+        if (current->type != ' ')
+            cout << i++ << ". Type: " << current->type << " Amount: " << current->ammount << endl;
+        current = current->next;
     }
 }
 int withdraw(User &U, double ammount)
@@ -96,7 +100,7 @@ int deposit(User &U, double ammount)
     return 1;
 }
 
-void transaction(User &U, int (*type)(User &, double), const char transtype, SessionRecord *Record)
+void transaction(User &U, int (*type)(User &, double), const char transtype, SessionRecord *&Record)
 {
     if (U.maxtrans != 0)
     {
@@ -115,16 +119,11 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
         int success = type(U, ammount);
 
         if (success)
-        {   
-            if (transtype == 'withdraw')
-            {
+        {
+            if (transtype == 'w')
                 ammount = -ammount;
-                TransUpdt(U, ammount, 'withdraw');
-            }
-            else if (transtype == 'deposit')
-            {
-                TransUpdt(U, ammount, 'deposit');
-            }
+
+            TransUpdt(U, ammount, transtype);
             TransRecord(U, ammount, Record);
             U.maxtrans--;
             showMessageAndDelay();
@@ -134,7 +133,6 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
     }
     else
         cout << "Transaction limit reached" << endl;
-    
 }
 
 void TransUpdt(User &U, double ammount, char type)
@@ -167,10 +165,11 @@ void TransRecord(User &U, double ammount, SessionRecord *Record)
     }
 }
 
-
-void Shutdown(int& running){
-    if(ITauth()){
-        
+void Shutdown(int &running)
+{
+    if (ITauth())
+    {
     }
-    else cout<<"Authorization is failed" <<endl;
+    else
+        cout << "Authorization is failed" << endl;
 }

@@ -17,7 +17,7 @@ void runATM()
     {
         cout << "cant load data from file";
     }
-    SessionRecord *SessionRecord;
+    SessionRecord *SessionRecord=nullptr;
 
     int running = 1; // active status
     system("cls");   // clearscreen

@@ -1,21 +1,21 @@
 #pragma once
 
 struct TransactionList{
-    TransactionList *next;
-    double ammount;
-    char type;
+    TransactionList *next=nullptr;
+    double ammount=0.0;
+    char type=' ';
 };
 struct SessionRecord{
-    SessionRecord *next;
-    double ammount;
-    int accnum;
+    SessionRecord *next=nullptr;
+    double ammount=0.0;
+    int accnum=0;
 };
 
 struct User{// User Node
-    int accnum;//account number
-    int PIN;
-    double balance;
-    int maxtrans;//transactions limit
-    TransactionList *List;
+    int accnum=0;//account number
+    int PIN=0;
+    double balance=0.0;
+    int maxtrans=5;//transactions limit
+    TransactionList *List=nullptr;
 };
 
