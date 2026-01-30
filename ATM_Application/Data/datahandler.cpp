@@ -1,4 +1,5 @@
-#include "User.h"
+#include "Data.h"
+#include "datahandler.h"
 #include <stdio.h>
 #include <fstream>
 #include <string>
@@ -28,13 +29,13 @@ int LoadData(unordered_map<int,User>& accounts){
         
         getline(data,temp,'|');
         U.balance=stod(temp);
-        
+        U.List = new TransactionList();
         accounts[U.accnum]=U;
     }
     return 1;
 }
 
-void SaveData(unordered_map<int,User>& accounts){
+int SaveData(unordered_map<int,User>& accounts){
     ofstream ATMDATA("DATA/user.txt", ios::out | ios::trunc);    
     if(!ATMDATA)return;
     for(const auto& pair: accounts){
@@ -43,9 +44,10 @@ void SaveData(unordered_map<int,User>& accounts){
         ATMDATA << u.accnum << "|"<<u.PIN << "|"<< u.balance << "\n";
     }
     ATMDATA.close();
+    return 1;
 }
 
-int Record(TransactionList *Record){
+int Record(SessionRecord *Record){
     ofstream record("DATA/record.txt",ios::app);
         if(!record)return -1;
         while(Record != NULL){

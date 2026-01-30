@@ -1,6 +1,7 @@
 #include "handlecommand.h"
 #include "auth.h"
-#include "User.h"
+#include "Data.h"
+
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -10,7 +11,7 @@ using namespace std;
 
 void commandlist(){
     cout<<"========================================"<<endl;
-    cout<<  "  deposit   - Deposit money"<<endl
+    cout<<"  deposit   - Deposit money"<<endl
         <<"  withdraw  - Withdraw money"<<endl
         <<"  balance   - Show balance"<<endl
         <<"  history   - Show transactions"<<endl
@@ -34,10 +35,10 @@ void handlecommand(const string &cmd,int &running,unordered_map<int,User>& accou
         }
         if(accounts.count(accountnumber)){
             if(Userauth(accounts[accountnumber].PIN)){
-                if (cmd == "deposit") transaction(deposit,);
-                else if (cmd == "withdraw") transaction(,withdraw,);
-                else if (cmd == "balance") ShowBalance();
-                else if (cmd == "history")ShowHistory();
+                if (cmd == "deposit") transaction(accounts[accountnumber],deposit,'deposit');
+                else if (cmd == "withdraw") transaction(accounts[accountnumber],withdraw,'withdraw');
+                else if (cmd == "balance") ShowBalance(accounts[accountnumber]);
+                else if (cmd == "history")ShowHistory(accounts[accountnumber]);
     
             }
         }
@@ -55,24 +56,22 @@ void shutdown(int &running){
     running = 0;
 }
 
-int search(int id,int accnum[],int count,int &index){
-    for(int i=0; i<count;i++){
-        if(id==accnum[i]){
-            index=i;
-            return 1;
-        }
+void ShowBalance(User& U){   
+    cout<< "Your balance:"<<U.balance<<endl;
+}
+void ShowHistory(User& U){
+    int i = 1;
+    while(U.List->next !=NULL){
+        cout<<i<<"."<<U.List->type<<U.List->ammount;
+        i++;
+        U.List= U.List->next;
     }
-    return 0;
-}
 
-void ShowBalance(int index,double balance[]){   
-    cout<< "Your balance:"<<balance[index]<<endl;
 }
-
-int withdraw(User U,double money,double balance[]){
-    if(balance[index]>money){
-        balance[index]-=money;
-        cout<<"withdraw successfully. Your new balance:"<<balance[index]<<endl;
+int withdraw(User& U,double ammount){
+    if(U.balance>ammount){
+        U.balance-=ammount;
+        cout<<"withdraw successfully. Your new balance:"<<U.balance<<endl;
         return 1;
     }
     else{
@@ -81,56 +80,46 @@ int withdraw(User U,double money,double balance[]){
     }
 }
 
-int deposit(User U,double money,double balance[]){
-    balance[index]+=money;
-    cout<<"deposit successfully. Your new balance:"<<balance[index]<<endl;
+int deposit(User& U,double ammount){
+    U.balance+=ammount;
+    cout<<"deposit successfully. Your new balance:"<<U.balance<<endl;
     return 1;
 }
 
-void transaction(User U,int (*type)(int,double,double*)){
+void transaction(User& U,int (*type)(User&,double),const char transtype){
     if(U.maxtrans!=0){
-        double money;
+        double ammount;
         cout<<"Account:"<<U.accnum<<endl;
         cout<<"Your current balance: "<< U.balance<<endl;
         cout<<"------------------------------------"<<endl;
         cout<<"Enter ammount: ";
-        if (!(cin >> money)) {//input bug type error
+        if (!(cin >> ammount)) {//input bug type error
             cout << "Invalid input! Please enter a number." << endl;
             cin.clear();            
             cin.ignore(1000, '\n');
             return;                 
         }
-        int success = type(User U,double money,double balance[]);
+        int success = type(U,ammount);
         
         if(success) {
-            if (type == withdraw){
-                record(index, history, ammount, accnum, -money);
+            if (transtype == 'withdraw'){
+                record(U,-ammount,'withdraw');
             } 
-            else{
-                record(index, history, ammount, accnum, money);
+            else if(transtype == 'deposit'){
+                record(U,ammount,'deposit');
             }
-        maxtrans[index]--;}
+        U.maxtrans--;}
     }
     else cout<<"Transaction limit reached"<<endl;
 }
 
-void record(TransactionList){
-    int i =0;
-    while(history[i]!=0){
-        i++;
-    }
-    history[i]=accnum[index];
-    ammount[i]=money;
+void record(User& U, double ammount,char type){
+while(U.List->next !=NULL){
+    U.List=U.List->next;
+}
+    TransactionList* L = new TransactionList;
+    U.List->next = L;
+    L->ammount=ammount;
+    L->type = type;
 }
 
-void ShowHistory(int index, int history[], double ammount[],int accnum[]){
-    int i =0;
-    int j =0;
-    cout<<"Your transaction history:"<<endl;
-    while( history[i]!=0){
-        if(history[i]==accnum[index]){
-            cout<<++j<<"." <<ammount[i]<<endl;
-            i++;
-        }
-    }
-}

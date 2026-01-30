@@ -1,7 +1,7 @@
 #include "atm_control.h"
 #include "handlecommand.h"
 #include "datahandler.h"
-#include "User.h"
+#include "Data.h"
 #include <unordered_map>
 #include <string>
 #include <iostream>
@@ -13,7 +13,11 @@ using namespace std;
 void runATM(){
     //data prepare
     unordered_map<int,User> accounts;
-    if(!LoadData(accounts))cout<<"cant load data from files";
+    if(!LoadData(accounts)){
+        cout<< "cant load data from file";
+    }
+    SessionRecord SessionRecord;
+    
     int running = 1;//active status
     system("cls");//clearscreen
     if(running) cout<< "Status: Running "<<endl;
@@ -25,8 +29,8 @@ void runATM(){
         cin>> cmd; 
         handlecommand(cmd,running,accounts);
     }
-    Record(history,ammount);
-    SaveData(accnum,PIN,balance,count); // Save data at the end of the session
+    Record(SessionRecord);
+    SaveData(accounts); // Save data at the end of the session
 }
 
 
