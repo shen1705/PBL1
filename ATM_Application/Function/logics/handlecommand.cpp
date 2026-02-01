@@ -69,7 +69,7 @@ int deposit(User &U, double ammount)
     return 1;
 }
 
-void transaction(User &U, int (*type)(User &, double), const char transtype, SessionRecord *Record)
+void transaction(User &U, int (*type)(User &, double), const char transtype, SessionRecord *&Record)
 {
     if (U.maxtrans != 0)
     {
