@@ -20,6 +20,7 @@ void handlecommand(const string &cmd, int &running, User &current,int &user_stat
         ShowHistory(current);
     else if (cmd=="exit"||cmd=="logout"){
         user_status =0;
+        
     }
     else if (cmd == "shutdown")
     {
@@ -40,13 +41,23 @@ void shutdown(int &running)
 void ShowHistory(User &U)
 {
     int i = 1;
-    while (U.List->next != NULL)
-    {
-        cout << i << "." << U.List->type << U.List->ammount;
-        i++;
-        U.List = U.List->next;
+    TransactionList *current = U.List;
+    if (current == nullptr) {
+        cout << "No history found." << endl;
+        delay(2);
+        return;
     }
+
+    while (current != nullptr)
+    {
+        string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
+        cout << i << ". " << typeStr << ": " << current->ammount << endl;
+        i++;
+        current = current->next;
+    }
+    system("pause"); 
 }
+
 int withdraw(User &U, double ammount)
 {
     if (U.balance >= ammount)
@@ -86,26 +97,27 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
 
         if (success)
         {   
-            if (transtype == 'withdraw')
+            if (transtype == 'w')
             {
                 ammount = -ammount;
                 TransUpdt(U, ammount, 'withdraw');
             }
-            else if (transtype == 'deposit')
+            else if (transtype == 'd')
             {
                 TransUpdt(U, ammount, 'deposit');
             }
             TransRecord(U, ammount, Record);
             U.maxtrans--;
-            cout<<"Processing transaction";
-            delay(2);
+            showMessageAndDelay();
             system("cls");
             drawUserBox(U.accnum,U.balance,U.maxtrans);
         }
+        else {delay(2);}
     }
-    else
+    else{
         cout << "Transaction limit reached" << endl;
-    
+        delay(2);
+    }
 }
 
 void TransUpdt(User &U, double ammount, char type)

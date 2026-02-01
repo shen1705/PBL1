@@ -13,7 +13,7 @@ int withdraw(User &U, double money);
 int deposit(User &U, double money);
 
 // Transaction
-void transaction(User &U, int (*type)(User, double, double), char transtype);
+void transaction(User &U, int (*type)(User&, double), char transtype,SessionRecord *&Record);
 
 // Record
 void TransUpdt(User &U, double ammount, char type);
