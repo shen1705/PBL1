@@ -29,7 +29,6 @@ int LoadData(unordered_map<int,User>& accounts){
         
         getline(data,temp,'|');
         U.balance=stod(temp);
-        U.List = new TransactionList();
         accounts[U.accnum]=U;
     }
     return 1;
@@ -37,7 +36,7 @@ int LoadData(unordered_map<int,User>& accounts){
 
 int SaveData(unordered_map<int,User>& accounts){
     ofstream ATMDATA("DATA/user.txt", ios::out | ios::trunc);    
-    if(!ATMDATA)return;
+    if(!ATMDATA)return 0;
     for(const auto& pair: accounts){
         const User& u = pair.second;
 
@@ -49,7 +48,7 @@ int SaveData(unordered_map<int,User>& accounts){
 
 int Record(SessionRecord *Record){
     ofstream record("DATA/record.txt",ios::app);
-        if(!record)return -1;
+        if(!record)return 0;
         while(Record != NULL){
             record << Record->accnum<< ":"<<Record->ammount<<"|";
             Record= Record->next;

@@ -1,39 +1,93 @@
 #include "auth.h"
+#include "Data.h"
+#include "UI.h"
 #include <string>
 #include <iostream>
 #include <limits>
+#include <unordered_map>
+#include <thread>
+#include <chrono>
 using namespace std;
 
-
-
-
-int ITauth() {
+int ITauth()
+{
     const string system_password = "12345";
     string password = "";
     
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    cout << "IT authentication required" << endl;
+    cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
-    
-    getline(cin, password);
 
-    if (password == system_password) {
+    cin >> password;
+
+    if (password == system_password)
+    {
         cout << "Access Granted." << endl;
-        return 1; 
-    } else {
+        return 1;
+    }
+    else
+    {
         cout << "Access Denied." << endl;
-        return 0; 
+        delay(3);
+        return 0;
     }
 }
 
+int Login(unordered_map<int, User> &accounts, User *&currentUser)
+{
+    string input; 
+    int accnum, pin;
+    cout << "\n===== LOGIN REQUIRED =====" << endl;
+    cout << "Please login for further actions" << endl;
+    cout << "Enter your account number: ";
+    if (!(cin >> input))
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return 0;
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
+   
+    try {
+        accnum = stoi(input);
+    } catch (...) {
+      
+        cout << "Invalid Input. Please enter a number." << endl;
+        delay(2);
+        return 0;
+    }
 
-int Userauth(int pin){
-    int PIN;
-    cout<< "Enter PIN:";
-    cin>>PIN;
-    cin.ignore(1000, '\n');
-    return PIN==pin;
+ 
+    if (accounts.count(accnum))
+    {
+  
+        cout << "Enter PIN: ";
+        if (!(cin >> pin))
+        {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return 0;
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
 
+        // 5. VERIFY PIN
+        if (pin == accounts[accnum].PIN)
+        {
+            currentUser = &accounts[accnum]; 
+            return 1;
+        }
+        else
+        {
+            loginfailedannounce(); 
+            return 0;
+        }
+    }
+    else
+    {
+        cout << "Login Failed! Can not find your account number" << endl;
+        delay(2);
+        return 0;
+    }
 }

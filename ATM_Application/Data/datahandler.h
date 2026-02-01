@@ -1,5 +1,6 @@
 #pragma once
-
-int SaveData(unordered_map<int,User>& accounts);
-int LoadData(unordered_map<int,User>& accounts);
-int Record(TransactionList Record);
+#include "Data.h"
+#include <unordered_map>
+int SaveData(std::unordered_map<int,User>& accounts);
+int LoadData(std::unordered_map<int,User>& accounts);
+int Record(SessionRecord *&Record);

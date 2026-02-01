@@ -7,13 +7,9 @@ enum TransactionType
     deposit
 };
 // basic
-void commandlist();
-void handlecommand(const std::string &cmd, int &running, unordered_map<int, User> &accounts, SessionRecord *Record);
-
+void handlecommand(const std::string &cmd, int &running,User &current,int &user_status, SessionRecord *&Record);
 
 // Data
-int search();
-void ShowBalance(User &U);
 void ShowHistory(User &U);
 
 // Transaction type
@@ -25,4 +21,4 @@ void transaction(User U, int (*type)(User, double, double), char transtype);
 
 // Record
 void TransUpdt(User &U, double ammount, char type);
-void TransRecord(User &U, double ammount,SessionRecord Record);
+void TransRecord(User &U, double ammount,SessionRecord *&Record);
