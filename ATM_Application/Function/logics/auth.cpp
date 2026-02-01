@@ -18,11 +18,6 @@ int ITauth()
 
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
-<<<<<<< Updated upstream
-    
-    getline(cin, password);
-=======
->>>>>>> Stashed changes
 
     cin >> password;
 
@@ -39,17 +34,6 @@ int ITauth()
     }
 }
 
-<<<<<<< Updated upstream
-
-
-int Userauth(int pin){
-    int PIN;
-    cout<< "Enter PIN:";
-    cin>>PIN;
-    cin.ignore(1000, '\n');
-    return PIN==pin;
-
-=======
 int Login(unordered_map<int, User> &accounts, User *&currentUser)
 {
     string input; 
@@ -106,5 +90,4 @@ int Login(unordered_map<int, User> &accounts, User *&currentUser)
         delay(2);
         return 0;
     }
->>>>>>> Stashed changes
 }

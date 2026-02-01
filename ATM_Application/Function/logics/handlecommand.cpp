@@ -117,7 +117,7 @@ void TransUpdt(User &U, double ammount, char type)
     U.List = newNode;
 }
 
-void TransRecord(User &U, double ammount, SessionRecord *Record)
+void TransRecord(User &U, double ammount, SessionRecord *&Record)
 {
     SessionRecord *newNode = new SessionRecord;
     newNode->accnum = U.accnum;

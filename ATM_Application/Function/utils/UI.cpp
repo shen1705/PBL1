@@ -58,11 +58,7 @@ void drawMenuBox()
 void showMessageAndDelay()
 {
     cout << "Processing transaction..." << endl;
-<<<<<<< Updated upstream
-    this_thread::sleep_for(chrono::seconds(2));
-=======
     delay(2); 
->>>>>>> Stashed changes
 }
 
 void logoutannounce() {

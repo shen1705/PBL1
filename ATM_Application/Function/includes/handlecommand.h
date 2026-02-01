@@ -21,4 +21,4 @@ void transaction(User U, int (*type)(User, double, double), char transtype);
 
 // Record
 void TransUpdt(User &U, double ammount, char type);
-void TransRecord(User &U, double ammount,SessionRecord Record);
+void TransRecord(User &U, double ammount,SessionRecord *&Record);
