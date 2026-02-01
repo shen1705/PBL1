@@ -100,11 +100,11 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
             if (transtype == 'w')
             {
                 ammount = -ammount;
-                TransUpdt(U, ammount, 'withdraw');
+                TransUpdt(U, ammount, 'w');
             }
             else if (transtype == 'd')
             {
-                TransUpdt(U, ammount, 'deposit');
+                TransUpdt(U, ammount, 'd');
             }
             TransRecord(U, ammount, Record);
             U.maxtrans--;
