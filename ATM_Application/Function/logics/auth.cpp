@@ -13,13 +13,18 @@ int ITauth()
 {
     const string system_password = "12345";
     string password = "";
-    
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
 
     cin >> password;
+    if (!(cin >> password))
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return 0;
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     if (password == system_password)
     {
