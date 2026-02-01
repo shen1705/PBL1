@@ -17,7 +17,7 @@ int ITauth()
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
 
-    cin >> password;
+
     if (!(cin >> password))
     {
         cin.clear();
@@ -29,6 +29,7 @@ int ITauth()
     if (password == system_password)
     {
         cout << "Access Granted." << endl;
+        delay(2);
         return 1;
     }
     else
