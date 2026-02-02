@@ -55,7 +55,7 @@ void runATM()
                     }
                 }
                 logoutannounce();
-                FreeHistory(*currentUser);
+                
             }
         }
         else if (menuOption == "0")
@@ -70,6 +70,10 @@ void runATM()
         }
         // Save data at the end of the session
     }
+    for (auto &pair : accounts) {
+        FreeHistory(pair.second);
+    }
+    FreeHistory(*currentUser);
     shutdownAnnounce();
     Record(SessionRecord);
     SaveData(accounts);
