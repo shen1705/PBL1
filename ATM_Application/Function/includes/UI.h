@@ -13,7 +13,6 @@ void History(std::ostream &os, int no, double amount, std::string type);
 void TransactionRecordRow(std::ostream &os, int accNum, double amount);
 
 // Main 
-void ShowHistory(User &U);
 void drawMenuBox();
 void drawUserBox(int accnum, double balance, int maxtrans);
 void showMessageAndDelay();

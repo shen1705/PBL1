@@ -2,9 +2,9 @@
 #include <iomanip>
 #include <string>
 #include <limits>
-#include <thread> // For sleep_for
-#include <chrono> // For seconds
-#include <cstdlib> // For system()
+#include <thread> 
+#include <chrono> 
+#include <cstdlib> 
 #include "UI.h"
 
 using namespace std;
@@ -63,35 +63,6 @@ void TransactionRecordRow(ostream &os, int accNum, double amount) {
 }
 
 // Main
-
-void ShowHistory(User &U) {
-    clearScreen(); 
-    const int width = 60;
-
-    drawTitle(cout, "Transaction History"); 
-    drawDivider(cout,width,'-');
-    cout << "|" << left << setw(6) << " No."
-         << "|" << left << setw(14) << " Type"
-         << "|" << right << setw(36) << "Amount " << "|" << endl;
-
-    cout << "|" << string(6, '-') << "+" << string(14, '-') << "+" << string(36, '-') << "|" << endl;
-
-    TransactionList *current = U.List;
-    if (current == nullptr) {
-        cout << "|" << left << setw(width - 4) << " No history found." << " |" << endl;
-    } else {
-        int i = 1;
-        while (current != nullptr) {
-            string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
-            History(cout, i, current->amount, typeStr);
-            i++;
-            current = current->next;
-        }
-    }
-    
-    cout << "+" << string(width - 2, '=') << "+" << endl;
-    pauseScreen(); 
-}
 
 void drawMenuBox() {
     clearScreen(); 

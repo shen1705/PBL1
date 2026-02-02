@@ -55,7 +55,8 @@ void ShowHistory(User &U)
         i++;
         current = current->next;
     }
-    system("pause"); 
+    cout << "+" << string(58, '=') << "+" << endl;
+    pauseScreen(); 
 }
 
 int withdraw(User &U, double amount)

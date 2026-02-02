@@ -60,11 +60,11 @@ int Record(SessionRecord *Record)
         return 0;
     record << endl;
     const int width = 60;
-    const int col1_w = 20;
-    const int col2_w = 36;
+    const int col1 = 20;
+    const int col2 = 36;
     string title = "Transaction Record";
     drawTitle(record,title);
-    record << "|" << left <<setw(col1_w)<< "Account Number" << "|" <<right<<setw(col2_w)<< "Transaction Amount" << "|" << endl;
+    record << "|" << left <<setw(col1)<< "Account Number" << "|" <<right<<setw(col2)<< "Transaction Amount" << "|" << endl;
     
     while (Record != NULL)
     {   TransactionRecordRow(record,Record->accnum,Record->amount);
