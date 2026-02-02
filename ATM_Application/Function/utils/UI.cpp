@@ -35,7 +35,6 @@ void drawTitle(ostream &os, string title) {
     int padding = (width - 2 - title.length()) / 2;
     os << "|" << setw(padding + title.length()) << right << title
        << setw(width - 2 - padding - title.length() + 1) << "|" << endl;
-    os << "+" << string(width - 2, '=') << "+" << endl;
 }
 
 void drawDivider(ostream &os, int width, char symbol) {
@@ -67,11 +66,12 @@ void TransactionRecordRow(ostream &os, int accNum, double amount) {
 void drawMenuBox() {
     clearScreen(); 
     drawTitle(cout, "WELCOME TO MY ATM PROGRAM");
+    drawDivider(cout,60,'-');
     const int width = 60;
     cout << "| " << left << setw(width - 4) << "1. Login - Type 1 to Login" << " |" << endl;
     cout << "| " << left << setw(width - 4) << "0. Shutdown - Type 0 to shutdown the program" << " |" << endl;
     cout << "+" << string(width - 2, '=') << "+" << endl;
-}
+}   
 
 void drawUserBox(int accnum, double balance, int maxtrans) {
     clearScreen(); 
