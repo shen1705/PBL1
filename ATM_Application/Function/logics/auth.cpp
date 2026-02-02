@@ -17,7 +17,6 @@ int ITauth()
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
 
-
     if (!(cin >> password))
     {
         cin.clear();
@@ -42,7 +41,7 @@ int ITauth()
 
 int Login(unordered_map<int, User> &accounts, User *&currentUser)
 {
-    string input; 
+    string input;
     int accnum, pin;
     cout << "\n===== LOGIN REQUIRED =====" << endl;
     cout << "Please login for further actions" << endl;
@@ -53,22 +52,23 @@ int Login(unordered_map<int, User> &accounts, User *&currentUser)
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         return 0;
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-   
-    try {
+    try
+    {
         accnum = stoi(input);
-    } catch (...) {
-      
+    }
+    catch (...)
+    {
+
         cout << "Invalid Input. Please enter a number." << endl;
         delay(2);
         return 0;
     }
 
- 
     if (accounts.count(accnum))
     {
-  
+
         cout << "Enter PIN: ";
         if (!(cin >> pin))
         {
@@ -76,17 +76,16 @@ int Login(unordered_map<int, User> &accounts, User *&currentUser)
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             return 0;
         }
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-        // 5. VERIFY PIN
         if (pin == accounts[accnum].PIN)
         {
-            currentUser = &accounts[accnum]; 
+            currentUser = &accounts[accnum];
             return 1;
         }
         else
         {
-            loginfailedannounce(); 
+            loginfailedannounce();
             return 0;
         }
     }

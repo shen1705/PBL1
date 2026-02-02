@@ -12,13 +12,13 @@ void drawUserBox(int accnum, double balance, int maxtrans)
     system("cls");
     const int width = 60;
     string title = "Account Number: " + to_string(accnum);
-    
+
     cout << "+" << string(width - 2, '=') << "+" << endl;
 
     int padding = (width - 2 - title.length()) / 2;
     cout << "|" << setw(padding + title.length()) << right << title
          << setw(width - 2 - padding - title.length() + 1) << "|" << endl;
-    
+
     cout << "|" << string(width - 2, '-') << "|" << endl;
 
     string balStr = "Balance: " + to_string(balance);
@@ -29,12 +29,11 @@ void drawUserBox(int accnum, double balance, int maxtrans)
 
     cout << "|" << string(width - 2, '-') << "|" << endl;
 
- 
     cout << "| " << left << setw(width - 4) << "deposit  - Deposit money" << " |" << endl;
     cout << "| " << left << setw(width - 4) << "withdraw - Withdraw money" << " |" << endl;
     cout << "| " << left << setw(width - 4) << "history  - Show transactions" << " |" << endl;
     cout << "| " << left << setw(width - 4) << "exit     - Log out" << " |" << endl;
-    
+
     cout << "+" << string(width - 2, '=') << "+" << endl;
 }
 
@@ -58,17 +57,19 @@ void drawMenuBox()
 void showMessageAndDelay()
 {
     cout << "Processing transaction..." << endl;
-    delay(2); 
+    delay(2);
 }
 
-void logoutannounce() {
+void logoutannounce()
+{
     cout << "Logging out..." << endl;
     delay(3);
 }
 
-void loginfailedannounce() {
+void loginfailedannounce()
+{
     cout << "Login Failed! Wrong PIN" << endl;
-    delay(3);
+    delay(2);
 }
 
 void shutdownAnnounce()
@@ -76,8 +77,8 @@ void shutdownAnnounce()
     system("cls");
     cout << "Saving DATA..." << endl;
     delay(2);
-    
-    for (int i = 3; i > 0; i--) 
+
+    for (int i = 3; i > 0; i--)
     {
         system("cls");
         cout << "Shutting down in " << i << endl;
@@ -85,6 +86,8 @@ void shutdownAnnounce()
     }
 }
 
-void delay(int seconds){
+
+void delay(int seconds)
+{
     this_thread::sleep_for(chrono::seconds(seconds));
 }
