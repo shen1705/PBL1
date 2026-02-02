@@ -55,6 +55,7 @@ void runATM()
                     }
                 }
                 logoutannounce();
+                FreeHistory(*currentUser);
             }
         }
         else if (menuOption == "0")

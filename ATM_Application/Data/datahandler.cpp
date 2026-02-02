@@ -63,17 +63,27 @@ int Record(SessionRecord *Record)
     const int col1_w = 20;
     const int col2_w = 36;
     string title = "Transaction Record";
-    drawTitle(title);
+    drawTitle(record,title);
     record << "|" << left <<setw(col1_w)<< "Account Number" << "|" <<right<<setw(col2_w)<< "Transaction Amount" << "|" << endl;
     
     while (Record != NULL)
-    {   record << "|" << left << setw(col1_w) << (" " + to_string(Record->accnum)) 
-               << "|" << right << setw(col2_w) << (to_string((int)Record->amount) + " ") 
-               << "|" << endl;
-        record << "|" << string(width - 2, '-') << "|" << endl;
+    {   TransactionRecordRow(record,Record->accnum,Record->amount);
+        drawDivider(record,60,'-');
         Record = Record->next;
     }
     record << "+" << string(width - 2, '=') << "+" << endl;
     record.close();
     return 1;
+}
+
+void FreeHistory(User &U)
+{
+    TransactionList *current = U.List;
+    while (current != nullptr)
+    {
+        TransactionList *temp = current;
+        current = current->next;
+        delete temp;
+    }
+    U.List = nullptr;
 }

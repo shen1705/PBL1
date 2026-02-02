@@ -1,12 +1,23 @@
 #pragma once
+#include <iostream>
+#include <string>
+#include "Data.h"
+
+//utils
+void clearScreen();
+void pauseScreen();
 void drawTitle(std::ostream &os, std::string title);
+void drawDivider(std::ostream &os, int width, char symbol);
+// Records
+void History(std::ostream &os, int no, double amount, std::string type);
+void TransactionRecordRow(std::ostream &os, int accNum, double amount);
+
+// Main 
+void ShowHistory(User &U);
 void drawMenuBox();
 void drawUserBox(int accnum, double balance, int maxtrans);
 void showMessageAndDelay();
-void logoutannounce();
-void loginfailedannounce();
-void shutdownAnnounce();
+void logoutannounce();      
+void loginfailedannounce(); 
+void shutdownAnnounce();    
 void delay(int seconds);
-void History(int no ,double amount, string type );
-void drawTitle(string title);
-
