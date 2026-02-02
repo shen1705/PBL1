@@ -7,19 +7,22 @@
 
 using namespace std;
 
+void drawTitle(ostream &os, string title)
+{
+    const int width = 60;
+    os << "+" << string(width - 2, '=') << "+" << endl;
+    int padding = (width - 2 - title.length()) / 2;
+    os << "|" << setw(padding + title.length()) << right << title
+       << setw(width - 2 - padding - title.length() + 1) << "|" << endl;
+    os << "+" << string(width - 2, '=') << "+" << endl;
+    cout << "|" << string(width - 2, '-') << "|" << endl;
+}
+
 void drawUserBox(int accnum, double balance, int maxtrans)
 {
     system("cls");
     const int width = 60;
-    string title = "Account Number: " + to_string(accnum);
-
-    cout << "+" << string(width - 2, '=') << "+" << endl;
-
-    int padding = (width - 2 - title.length()) / 2;
-    cout << "|" << setw(padding + title.length()) << right << title
-         << setw(width - 2 - padding - title.length() + 1) << "|" << endl;
-
-    cout << "|" << string(width - 2, '-') << "|" << endl;
+    drawTitle("Account Number: "+to_string(accnum));
 
     string balStr = "Balance: " + to_string(balance);
     cout << "| " << left << setw(width - 4) << balStr.substr(0, 20) << " |" << endl;
@@ -40,17 +43,9 @@ void drawUserBox(int accnum, double balance, int maxtrans)
 void drawMenuBox()
 {
     const int width = 60;
-    string title = "WELCOME TO MY ATM PROGRAM";
-    cout << "+" << string(width - 2, '=') << "+" << endl;
-
-    int padding = (width - 2 - title.length()) / 2;
-    cout << "|" << setw(padding + title.length()) << right << title
-         << setw(width - 2 - padding - title.length() + 1) << "|" << endl;
-    cout << "|" << string(width - 2, '-') << "|" << endl;
-
+    drawTitle("WELCOME TO MY ATM");
     cout << "| " << left << setw(width - 4) << "1. Login - Type 1 to Login" << " |" << endl;
     cout << "| " << left << setw(width - 4) << "0. Shutdown - Type 0 to shutdown the program" << " |" << endl;
-
     cout << "+" << string(width - 2, '=') << "+" << endl;
 }
 
@@ -84,6 +79,18 @@ void shutdownAnnounce()
         cout << "Shutting down in " << i << endl;
         delay(1);
     }
+}
+void History(int no, double amount, string type)
+{
+    const int col1_w = 6;  
+    const int col2_w = 14; 
+    const int col3_w = 36; 
+
+    string amtStr = to_string((int)amount) + " "; 
+
+    cout << "|" << left << setw(col1_w) << (" " + to_string(no))
+         << "|" << left << setw(col2_w) << (" " + type)
+         << "|" << right << setw(col3_w) << amtStr << "|" << endl;
 }
 
 

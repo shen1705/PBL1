@@ -47,11 +47,11 @@ void ShowHistory(User &U)
         delay(2);
         return;
     }
-
+    drawTitle("Transaction History");
     while (current != nullptr)
     {
         string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
-        cout << i << ". " << typeStr << ": " << current->amount << endl;
+        History(i,current->amount,typeStr);
         i++;
         current = current->next;
     }

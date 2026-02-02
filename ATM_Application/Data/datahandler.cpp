@@ -1,5 +1,6 @@
 #include "Data.h"
 #include "datahandler.h"
+#include "UI.h"
 #include <stdio.h>
 #include <fstream>
 #include <string>
@@ -62,14 +63,8 @@ int Record(SessionRecord *Record)
     const int col1_w = 20;
     const int col2_w = 36;
     string title = "Transaction Record";
-    record << "+" << string(width - 2, '=') << "+" << endl;
-    int padding = (width - 2 - title.length()) / 2;
-    record << "|" << setw(padding + title.length()) << right << title
-           << setw(width - 2 - padding - title.length() + 1) << "|" << endl;
-    record << "+" << string(width - 2, '=') << "+" << endl;
-    
+    drawTitle(title);
     record << "|" << left <<setw(col1_w)<< "Account Number" << "|" <<right<<setw(col2_w)<< "Transaction Amount" << "|" << endl;
-    
     
     while (Record != NULL)
     {   record << "|" << left << setw(col1_w) << (" " + to_string(Record->accnum)) 
