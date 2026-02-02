@@ -16,6 +16,6 @@ int deposit(User &U, double money);
 void transaction(User &U, int (*type)(User&, double), char transtype,SessionRecord *&Record);
 
 // Record
-void TransUpdt(User &U, double ammount, char type);
-void TransRecord(User &U, double ammount,SessionRecord *&Record);
+void TransUpdt(User &U, double amount, char type);
+void TransRecord(User &U, double amount,SessionRecord *&Record);
 void shutdown(int &running);

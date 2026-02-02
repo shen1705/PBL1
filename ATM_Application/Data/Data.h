@@ -2,12 +2,12 @@
 
 struct TransactionList{
     TransactionList *next=nullptr;
-    double ammount=0.0;
+    double amount=0.0;
     char type=' ';
 };
 struct SessionRecord{
     SessionRecord *next=nullptr;
-    double ammount=0.0;
+    double amount=0.0;
     int accnum=0;
 };
 

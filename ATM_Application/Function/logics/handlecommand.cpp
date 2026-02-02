@@ -51,18 +51,18 @@ void ShowHistory(User &U)
     while (current != nullptr)
     {
         string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
-        cout << i << ". " << typeStr << ": " << current->ammount << endl;
+        cout << i << ". " << typeStr << ": " << current->amount << endl;
         i++;
         current = current->next;
     }
     system("pause"); 
 }
 
-int withdraw(User &U, double ammount)
+int withdraw(User &U, double amount)
 {
-    if (U.balance >= ammount)
+    if (U.balance >= amount)
     {
-        U.balance -= ammount;
+        U.balance -= amount;
         cout << "withdraw successfully. " << U.balance << endl;
         return 1;
     }
@@ -73,9 +73,9 @@ int withdraw(User &U, double ammount)
     }
 }
 
-int deposit(User &U, double ammount)
+int deposit(User &U, double amount)
 {
-    U.balance += ammount;
+    U.balance += amount;
     cout << "deposit successfully. " << U.balance << endl;
     return 1;
 }
@@ -84,29 +84,29 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
 {
     if (U.maxtrans != 0)
     {
-        double ammount;
-        cout << "Enter ammount: ";
-        if (!(cin >> ammount))
+        double amount;
+        cout << "Enter amount: ";
+        if (!(cin >> amount))
         { // input bug type error
             cout << "Invalid input! Please enter a number." << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');;
             return;
         }
-        int success = type(U, ammount);
+        int success = type(U, amount);
 
         if (success)
         {   
             if (transtype == 'w')
             {
-                ammount = -ammount;
-                TransUpdt(U, ammount, 'w');
+                amount = -amount;
+                TransUpdt(U, amount, 'w');
             }
             else if (transtype == 'd')
             {
-                TransUpdt(U, ammount, 'd');
+                TransUpdt(U, amount, 'd');
             }
-            TransRecord(U, ammount, Record);
+            TransRecord(U, amount, Record);
             U.maxtrans--;
             showMessageAndDelay();
             system("cls");
@@ -120,20 +120,20 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
     }
 }
 
-void TransUpdt(User &U, double ammount, char type)
+void TransUpdt(User &U, double amount, char type)
 {
     TransactionList *newNode = new TransactionList;
-    newNode->ammount = ammount;
+    newNode->amount = amount;
     newNode->type = type;
     newNode->next = U.List;
     U.List = newNode;
 }
 
-void TransRecord(User &U, double ammount, SessionRecord *&Record)
+void TransRecord(User &U, double amount, SessionRecord *&Record)
 {
     SessionRecord *newNode = new SessionRecord;
     newNode->accnum = U.accnum;
-    newNode->ammount = ammount;
+    newNode->amount = amount;
     newNode->next = Record;
     Record = newNode;
 }
