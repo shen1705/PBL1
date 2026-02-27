@@ -10,14 +10,6 @@
 using namespace std;
 
 
-//utils
-void clearScreen() {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear"); 
-    #endif
-}
 
 void pauseScreen() {
     cout << "Press Enter to continue...";
@@ -29,44 +21,44 @@ void delay(int seconds) {
     this_thread::sleep_for(chrono::seconds(seconds));
 }
 
-void drawTitle(ostream &os, string title) {
+void drawTitle(string title) {
     const int width = 60;
-    os << "+" << string(width - 2, '=') << "+" << endl;
+    cout << "+" << string(width - 2, '=') << "+" << endl;
     int padding = (width - 2 - title.length()) / 2;
-    os << "|" << setw(padding + title.length()) << right << title
+    cout << "|" << setw(padding + title.length()) << right << title
        << setw(width - 2 - padding - title.length() + 1) << "|" << endl;
 }
 
-void drawDivider(ostream &os, int width, char symbol) {
-    os << "|" << string(width - 2, symbol) << "|" << endl;
+void drawDivider(int width, char symbol) {
+    cout << "|" << string(width - 2, symbol) << "|" << endl;
 }
 
-void History(ostream &os, int no, double amount, string type) {
+void History(int no, double amount, string type) {
     const int col1 = 6;  
     const int col2 = 14; 
     const int col3 = 36; 
 
     string amtStr = to_string((int)amount) + " "; 
-    os << "|" << left << setw(col1) << (" " + to_string(no))
+    cout << "|" << left << setw(col1) << (" " + to_string(no))
        << "|" << left << setw(col2) << (" " + type)
        << "|" << right << setw(col3) << amtStr << "|" << endl;
 }
 
-void TransactionRecordRow(ostream &os, int accNum, double amount) {
+void TransactionRecordRow( int accNum, double amount) {
     const int col1 = 20;
     const int col2 = 36;
     string accStr = " " + to_string(accNum);
     string amtStr = to_string((int)amount) + " ";
-    os << "|" << left << setw(col1) << accStr
+    cout << "|" << left << setw(col1) << accStr
        << "|" << right << setw(col2) << amtStr << "|" << endl;
 }
 
 // Main
 
 void drawMenuBox() {
-    clearScreen(); 
-    drawTitle(cout, "WELCOME TO MY ATM PROGRAM");
-    drawDivider(cout,60,'-');
+    system("cls"); 
+    drawTitle("WELCOME TO MY ATM PROGRAM");
+    drawDivider(60,'-');
     const int width = 60;
     cout << "| " << left << setw(width - 4) << "1. Login - Type 1 to Login" << " |" << endl;
     cout << "| " << left << setw(width - 4) << "0. Shutdown - Type 0 to shutdown the program" << " |" << endl;
@@ -74,11 +66,11 @@ void drawMenuBox() {
 }   
 
 void drawUserBox(int accnum, double balance, int maxtrans) {
-    clearScreen(); 
+    system("cls"); 
     const int width = 60;
     
-    drawTitle(cout,"Account Number: "+to_string(accnum));
-    drawDivider(cout,width,'-');
+    drawTitle("Account Number: "+to_string(accnum));
+    drawDivider(width,'-');
 
     string balStr = "Balance: " + to_string(balance);
     cout << "| " << left << setw(width - 4) << balStr.substr(0, 20) << " |" << endl;
@@ -109,11 +101,11 @@ void loginfailedannounce() {
 }
 
 void shutdownAnnounce() {
-    clearScreen();
+    system("cls");
     cout << "Saving DATA..." << endl;
     delay(2);
     for (int i = 3; i > 0; i--) {
-        clearScreen();
+        system("cls");
         cout << "Shutting down in " << i << endl;
         delay(1);
     }

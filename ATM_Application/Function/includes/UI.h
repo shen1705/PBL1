@@ -6,11 +6,11 @@
 //utils
 void clearScreen();
 void pauseScreen();
-void drawTitle(std::ostream &os, std::string title);
-void drawDivider(std::ostream &os, int width, char symbol);
+void drawTitle(std::string title);
+void drawDivider(int width, char symbol);
 // Records
-void History(std::ostream &os, int no, double amount, std::string type);
-void TransactionRecordRow(std::ostream &os, int accNum, double amount);
+void History(int no, double amount, std::string type);
+void TransactionRecordRow(int accNum, double amount);
 
 // Main 
 void drawMenuBox();
