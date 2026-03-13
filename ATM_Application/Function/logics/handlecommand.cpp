@@ -47,11 +47,11 @@ void ShowHistory(User &U)
         delay(2);
         return;
     }
-    drawTitle("Transaction History");
+    drawTitle(cout,"Transaction History");
     while (current != nullptr)
     {
         string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
-        History(i,current->amount,typeStr);
+        History(cout,i,current->amount,typeStr);
         i++;
         current = current->next;
     }
@@ -110,7 +110,7 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
             TransRecord(U, amount, Record);
             U.maxtrans--;
             showMessageAndDelay();
-            system("cls");
+            clearScreen();
             drawUserBox(U.accnum,U.balance,U.maxtrans);
         }
         else {delay(2);}

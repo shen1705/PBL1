@@ -23,7 +23,7 @@ void runATM()
 
     int system_running = 1; // active status
     struct User *currentUser = nullptr;
-    
+
     while (system_running)
     {
         system("cls");
