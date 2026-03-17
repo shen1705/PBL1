@@ -40,7 +40,7 @@ int LoadData(unordered_map<int, User> &accounts)
 
 int SaveData(unordered_map<int, User> &accounts)
 {
-    ofstream ATMDATA("DATA/user.txt", ios::out | ios::trunc);
+    ofstream ATMDATA("Data/user.dat", ios::out | ios::trunc);
     if (!ATMDATA)
         return 0;
     for (const auto &pair : accounts)
@@ -55,7 +55,7 @@ int SaveData(unordered_map<int, User> &accounts)
 
 int Record(SessionRecord *Record)
 {
-    ofstream record("DATA/record.txt", ios::app);
+    ofstream record("Data/record.dat", ios::app);
     if (!record)
         return 0;
     record << endl;
