@@ -104,7 +104,7 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
             {
                 TransUpdt(U, amount, 'd');
             }
-            TransRecord(U, amount, Record);
+            TransRecord(U, amount, Record,transtype);
             U.maxtrans--;
             showMessageAndDelay();
             clearScreen();
@@ -129,11 +129,12 @@ void TransUpdt(User &U, double amount, char type)
     newNode->next = U.List;
     U.List = newNode;
 }
-void TransRecord(User &U, double amount, SessionRecord *&Record)
+void TransRecord(User &U, double amount, SessionRecord *&Record,char type)
 {
     SessionRecord *newNode = new SessionRecord;
     newNode->accnum = U.accnum;
     newNode->amount = amount;
     newNode->next = Record;
+    newNode->type = type;
     Record = newNode;
 }

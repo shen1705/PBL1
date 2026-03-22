@@ -17,5 +17,5 @@ void transaction(User &U, int (*type)(User&, double), char transtype,SessionReco
 
 // Record
 void TransUpdt(User &U, double amount, char type);
-void TransRecord(User &U, double amount,SessionRecord *&Record);
+void TransRecord(User &U, double amount,SessionRecord *&Record,char type);
 void shutdown(int &running);

@@ -12,6 +12,7 @@ struct SessionRecord
     SessionRecord *next=nullptr;
     double amount=0.0;
     int accnum=0;
+    char type;
 };
 
 struct User //Người dùng

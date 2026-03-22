@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <ctime>
 using namespace std;
 
 int LoadData(UserList* &accounts)
@@ -67,24 +68,49 @@ int SaveData(UserList* accounts)
     return 1;
 }
 
-int Record(SessionRecord *Record)
-{
-    ofstream record("Data/record.dat", ios::app);
-    if (!record)
-        return 0;
-    record << endl;
-    const int width = 60;
-    const int col1 = 20;
-    const int col2 = 36;
-    string title = "Transaction Record";
-    drawTitle(record,title);
-    record << "|" << left <<setw(col1)<< "Account Number" << "|" <<right<<setw(col2)<< "Transaction Amount" << "|" << endl;
+int Record(SessionRecord *RecordNode) 
+{   
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+    stringstream filename;
+    filename << "Data/record_" 
+             << 1900 + ltm->tm_year << "-"
+             << setfill('0') << setw(2) << 1 + ltm->tm_mon << "-"
+             << setfill('0') << setw(2) << ltm->tm_mday << "_"
+             << setfill('0') << setw(2) << ltm->tm_hour << "-"
+             << setfill('0') << setw(2) << ltm->tm_min << "-"
+             << setfill('0') << setw(2) << ltm->tm_sec << ".txt";
+    ofstream record(filename.str(), ios::out);
+    if (!record) return 0;
     
-    while (Record != NULL)
-    {   TransactionRecordRow(record,Record->accnum,Record->amount);
-        drawDivider(record,60,'-');
-        Record = Record->next;
+    record << endl;
+    
+    record << "Session Time: " 
+           << 1900 + ltm->tm_year << "-" << 1 + ltm->tm_mon << "-" << ltm->tm_mday << " "
+           << ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec << endl << endl;
+    const int width = 60;
+    const int col1 = 18;
+    const int col2 = 10;
+    const int col3 = 28;
+    string title = "Transaction Record";
+    
+    drawTitle(record, title);
+    
+
+    record << "|" << left << setw(col1) << "Account Number" 
+           << "|" << left << setw(col2) << "Type"
+           << "|" << right << setw(col3) << "Transaction Amount" << "|" << endl;
+    
+    while (RecordNode != nullptr)
+    {   
+        string typeStr = (RecordNode->type == 'd') ? "Deposit" : "Withdraw";
+        
+        TransactionRecordRow(record, RecordNode->accnum, typeStr, RecordNode->amount);
+        
+        drawDivider(record, width, '-');
+        RecordNode = RecordNode->next;
     }
+    
     record << "+" << string(width - 2, '=') << "+" << endl;
     record.close();
     return 1;

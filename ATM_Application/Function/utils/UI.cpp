@@ -57,16 +57,13 @@ void History(ostream &os, int no, double amount, string type)
        << "|" << right << setw(col3) << amtStr << "|" << endl;
 }
 
-void TransactionRecordRow(ostream &os, int accNum, double amount)
+// 
+void TransactionRecordRow(ostream &os, int accnum, string typeStr, double amount)
 {
-    const int col1 = 20;
-    const int col2 = 36;
-    string accStr = " " + to_string(accNum);
-    string amtStr = to_string((int)amount) + " ";
-    os << "|" << left << setw(col1) << accStr
-       << "|" << right << setw(col2) << amtStr << "|" << endl;
+    os << "|" << left << setw(18) << accnum 
+       << "|" << left << setw(10) << typeStr
+       << "|" << right << setw(28) << fixed << setprecision(2) << amount << "|" << endl;
 }
-
 // Main
 
 void drawMenuBox()
