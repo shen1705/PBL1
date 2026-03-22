@@ -1,21 +1,31 @@
 #pragma once
 
-struct TransactionList{
+struct TransactionList
+{
     TransactionList *next=nullptr;
-    double ammount=0.0;
+    double amount=0.0;
     char type=' ';
 };
-struct SessionRecord{
+
+struct SessionRecord
+{
     SessionRecord *next=nullptr;
-    double ammount=0.0;
+    double amount=0.0;
     int accnum=0;
+    char type;
 };
 
-struct User{// User Node
-    int accnum=0;//account number
-    int PIN=0;
-    double balance=0.0;
-    int maxtrans=5;//transactions limit
-    TransactionList *List=nullptr;
+struct User //Người dùng
+{
+    int accnum=-1;//account number
+    int PIN=0;//PIN
+    double balance=0.0;//account balance
+    int maxtrans=5;// max transitions
+    TransactionList *List;// transactions history
 };
 
+struct UserList 
+{
+    User data;
+    UserList *next;
+};

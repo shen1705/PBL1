@@ -4,26 +4,28 @@
 #include <string>
 #include <iostream>
 #include <limits>
-#include <unordered_map>
-#include <thread>
-#include <chrono>
 using namespace std;
 
 int ITauth()
 {
     const string system_password = "12345";
     string password = "";
-    
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
 
-    cin >> password;
+    if (!(cin >> password))
+    {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        return 0;
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
     if (password == system_password)
     {
         cout << "Access Granted." << endl;
+        delay(2);
         return 1;
     }
     else
@@ -34,9 +36,9 @@ int ITauth()
     }
 }
 
-int Login(unordered_map<int, User> &accounts, User *&currentUser)
+int Login(UserList* accounts, User *&currentUser)
 {
-    string input; 
+    string input;
     int accnum, pin;
     cout << "\n===== LOGIN REQUIRED =====" << endl;
     cout << "Please login for further actions" << endl;
@@ -47,22 +49,34 @@ int Login(unordered_map<int, User> &accounts, User *&currentUser)
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         return 0;
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-   
-    try {
+    try
+    {
         accnum = stoi(input);
-    } catch (...) {
-      
+    }
+    catch (...)
+    {
         cout << "Invalid Input. Please enter a number." << endl;
         delay(2);
         return 0;
     }
+    //search
+    UserList* current = accounts;
+    bool found = false;
 
- 
-    if (accounts.count(accnum))
+    while (current != nullptr)
     {
-  
+        if (current->data.accnum == accnum)
+        {
+            found = true;
+            break;
+        }
+        current = current->next;
+    }
+
+    if (found)
+    {
         cout << "Enter PIN: ";
         if (!(cin >> pin))
         {
@@ -70,17 +84,16 @@ int Login(unordered_map<int, User> &accounts, User *&currentUser)
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
             return 0;
         }
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-        // 5. VERIFY PIN
-        if (pin == accounts[accnum].PIN)
+        if (pin == current->data.PIN)
         {
-            currentUser = &accounts[accnum]; 
+            currentUser = &(current->data);
             return 1;
         }
         else
         {
-            loginfailedannounce(); 
+            loginfailedannounce();
             return 0;
         }
     }

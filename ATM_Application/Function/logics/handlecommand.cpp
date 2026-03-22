@@ -5,21 +5,19 @@
 #include <iostream>
 #include <string>
 #include <limits>
-#include <unordered_map>
-
 using namespace std;
 
-void handlecommand(const string &cmd, int &running, User &current,int &user_status, SessionRecord *&Record)
+void handlecommand(const string &cmd, int &running, User &current, int &user_status, SessionRecord *&Record)
 {
-
     if (cmd == "deposit")
         transaction(current, deposit, 'd', Record);
     else if (cmd == "withdraw")
         transaction(current, withdraw, 'w', Record);
     else if (cmd == "history")
         ShowHistory(current);
-    else if (cmd=="exit"||cmd=="logout"){
-        user_status =0;
+    else if (cmd == "exit" || cmd == "logout")
+    {
+        user_status = 0;
     }
     else if (cmd == "shutdown")
     {
@@ -30,28 +28,39 @@ void handlecommand(const string &cmd, int &running, User &current,int &user_stat
     }
     else
         cout << "Unknown command." << endl;
+        delay(2);
 }
-
 void shutdown(int &running)
 {
     running = 0;
 }
-
 void ShowHistory(User &U)
 {
     int i = 1;
-    while (U.List->next != NULL)
+    TransactionList *current = U.List;
+    if (current == nullptr)
     {
-        cout << i << "." << U.List->type << U.List->ammount;
-        i++;
-        U.List = U.List->next;
+        cout << "No history found." << endl;
+        delay(2);
+        return;
     }
-}
-int withdraw(User &U, double ammount)
-{
-    if (U.balance >= ammount)
+    drawTitle(cout, "Transaction History");
+    while (current != nullptr)
     {
-        U.balance -= ammount;
+        string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
+        History(cout, i, current->amount, typeStr);
+        i++;
+        current = current->next;
+    }
+    cout << "+" << string(58, '=') << "+" << endl;
+    pauseScreen();
+}
+
+int withdraw(User &U, double amount)
+{
+    if (U.balance >= amount)
+    {
+        U.balance -= amount;
         cout << "withdraw successfully. " << U.balance << endl;
         return 1;
     }
@@ -62,66 +71,71 @@ int withdraw(User &U, double ammount)
     }
 }
 
-int deposit(User &U, double ammount)
+int deposit(User &U, double amount)
 {
-    U.balance += ammount;
+    U.balance += amount;
     cout << "deposit successfully. " << U.balance << endl;
     return 1;
 }
 
-void transaction(User &U, int (*type)(User &, double), const char transtype, SessionRecord *Record)
+void transaction(User &U, int (*type)(User &, double), const char transtype, SessionRecord *&Record)
 {
     if (U.maxtrans != 0)
     {
-        double ammount;
-        cout << "Enter ammount: ";
-        if (!(cin >> ammount))
+        double amount;
+        cout << "Enter amount: ";
+        if (!(cin >> amount))
         { // input bug type error
             cout << "Invalid input! Please enter a number." << endl;
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            ;
             return;
         }
-        int success = type(U, ammount);
+        int success = type(U, amount);
 
         if (success)
-        {   
-            if (transtype == 'withdraw')
+        {
+            if (transtype == 'w')
             {
-                ammount = -ammount;
-                TransUpdt(U, ammount, 'withdraw');
+                amount = -amount;
+                TransUpdt(U, amount, 'w');
             }
-            else if (transtype == 'deposit')
+            else if (transtype == 'd')
             {
-                TransUpdt(U, ammount, 'deposit');
+                TransUpdt(U, amount, 'd');
             }
-            TransRecord(U, ammount, Record);
+            TransRecord(U, amount, Record,transtype);
             U.maxtrans--;
-            cout<<"Processing transaction";
+            showMessageAndDelay();
+            clearScreen();
+            drawUserBox(U.accnum, U.balance, U.maxtrans);
+        }
+        else
+        {
             delay(2);
-            system("cls");
-            drawUserBox(U.accnum,U.balance,U.maxtrans);
         }
     }
     else
+    {
         cout << "Transaction limit reached" << endl;
-    
+        delay(2);
+    }
 }
-
-void TransUpdt(User &U, double ammount, char type)
+void TransUpdt(User &U, double amount, char type)
 {
     TransactionList *newNode = new TransactionList;
-    newNode->ammount = ammount;
+    newNode->amount = amount;
     newNode->type = type;
     newNode->next = U.List;
     U.List = newNode;
 }
-
-void TransRecord(User &U, double ammount, SessionRecord *&Record)
+void TransRecord(User &U, double amount, SessionRecord *&Record,char type)
 {
     SessionRecord *newNode = new SessionRecord;
     newNode->accnum = U.accnum;
-    newNode->ammount = ammount;
+    newNode->amount = amount;
     newNode->next = Record;
+    newNode->type = type;
     Record = newNode;
 }
