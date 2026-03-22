@@ -5,22 +5,19 @@
 #include <iostream>
 #include <string>
 #include <limits>
-#include <unordered_map>
-
 using namespace std;
 
-void handlecommand(const string &cmd, int &running, User &current,int &user_status, SessionRecord *&Record)
+void handlecommand(const string &cmd, int &running, User &current, int &user_status, SessionRecord *&Record)
 {
-
     if (cmd == "deposit")
         transaction(current, deposit, 'd', Record);
     else if (cmd == "withdraw")
         transaction(current, withdraw, 'w', Record);
     else if (cmd == "history")
         ShowHistory(current);
-    else if (cmd=="exit"||cmd=="logout"){
-        user_status =0;
-        
+    else if (cmd == "exit" || cmd == "logout")
+    {
+        user_status = 0;
     }
     else if (cmd == "shutdown")
     {
@@ -32,31 +29,30 @@ void handlecommand(const string &cmd, int &running, User &current,int &user_stat
     else
         cout << "Unknown command." << endl;
 }
-
 void shutdown(int &running)
 {
     running = 0;
 }
-
 void ShowHistory(User &U)
 {
     int i = 1;
     TransactionList *current = U.List;
-    if (current == nullptr) {
+    if (current == nullptr)
+    {
         cout << "No history found." << endl;
         delay(2);
         return;
     }
-    drawTitle(cout,"Transaction History");
+    drawTitle(cout, "Transaction History");
     while (current != nullptr)
     {
         string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
-        History(cout,i,current->amount,typeStr);
+        History(cout, i, current->amount, typeStr);
         i++;
         current = current->next;
     }
     cout << "+" << string(58, '=') << "+" << endl;
-    pauseScreen(); 
+    pauseScreen();
 }
 
 int withdraw(User &U, double amount)
@@ -91,13 +87,14 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
         { // input bug type error
             cout << "Invalid input! Please enter a number." << endl;
             cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            ;
             return;
         }
         int success = type(U, amount);
 
         if (success)
-        {   
+        {
             if (transtype == 'w')
             {
                 amount = -amount;
@@ -111,16 +108,19 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
             U.maxtrans--;
             showMessageAndDelay();
             clearScreen();
-            drawUserBox(U.accnum,U.balance,U.maxtrans);
+            drawUserBox(U.accnum, U.balance, U.maxtrans);
         }
-        else {delay(2);}
+        else
+        {
+            delay(2);
+        }
     }
-    else{
+    else
+    {
         cout << "Transaction limit reached" << endl;
         delay(2);
     }
 }
-
 void TransUpdt(User &U, double amount, char type)
 {
     TransactionList *newNode = new TransactionList;
@@ -129,7 +129,6 @@ void TransUpdt(User &U, double amount, char type)
     newNode->next = U.List;
     U.List = newNode;
 }
-
 void TransRecord(User &U, double amount, SessionRecord *&Record)
 {
     SessionRecord *newNode = new SessionRecord;

@@ -5,21 +5,21 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <unordered_map>
 #include <iomanip>
 using namespace std;
 
-int LoadData(unordered_map<int, User> &accounts)
+int LoadData(UserList* &accounts)
 {
-    ifstream ATMDATA("DATA/user.txt");
-    if (!ATMDATA)
-    {
-        return 0;
-    }
+    ifstream ATMDATA("DATA/user.dat");
+    if (!ATMDATA) return 0;
+
     string line;
+    UserList* current = nullptr;
+    accounts = nullptr;
 
     while (getline(ATMDATA, line))
     {
+        if (line.empty()) continue;
         stringstream data(line);
         string temp;
         User U;
@@ -33,21 +33,35 @@ int LoadData(unordered_map<int, User> &accounts)
 
         getline(data, temp, '|');
         U.balance = stod(temp);
-        accounts[U.accnum] = U;
+        U.List = nullptr;
+
+        UserList* newNode = new UserList;
+        newNode->data = U;
+        newNode->next = nullptr;
+
+        if (accounts == nullptr) {
+            accounts = newNode;
+            current = accounts;
+        } else {
+            current->next = newNode;
+            current = newNode;
+        }
     }
+    ATMDATA.close();
     return 1;
 }
 
-int SaveData(unordered_map<int, User> &accounts)
+int SaveData(UserList* accounts)
 {
-    ofstream ATMDATA("Data/user.dat", ios::out | ios::trunc);
-    if (!ATMDATA)
-        return 0;
-    for (const auto &pair : accounts)
+    ofstream ATMDATA("DATA/user.dat", ios::out | ios::trunc);
+    if (!ATMDATA) return 0;
+    
+    UserList* current = accounts;
+    while (current != nullptr)
     {
-        const User &u = pair.second;
-
+        const User &u = current->data;
         ATMDATA << u.accnum << "|" << u.PIN << "|" << u.balance << "\n";
+        current = current->next;
     }
     ATMDATA.close();
     return 1;

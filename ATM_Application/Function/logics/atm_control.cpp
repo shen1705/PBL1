@@ -5,7 +5,6 @@
 #include "auth.h"
 #include "UI.h"
 #include <limits>
-#include <unordered_map>
 #include <string>
 #include <iostream>
 
@@ -14,13 +13,12 @@ using namespace std;
 void runATM()
 {
     // data prepare
-    unordered_map<int, User> accounts;
+    UserList* accounts = nullptr;
     if (!LoadData(accounts))
     {
         cout << "cant load data from file";
     }
-    SessionRecord *SessionRecord = nullptr;
-
+    SessionRecord *sessionrecord = nullptr;
     int system_running = 1; // active status
     struct User *currentUser = nullptr;
 
@@ -51,7 +49,7 @@ void runATM()
                         string cmd;
                         cout << "ATM>";
                         cin >> cmd;
-                        handlecommand(cmd, system_running, *currentUser, user_status, SessionRecord);
+                        handlecommand(cmd, system_running, *currentUser, user_status, sessionrecord);
                     }
                 }
                 logoutannounce();
@@ -70,11 +68,15 @@ void runATM()
         }
         // Save data at the end of the session
     }
-    for (auto &pair : accounts) {
-        FreeHistory(pair.second);
-    }
-    FreeHistory(*currentUser);
     shutdownAnnounce();
-    Record(SessionRecord);
+    Record(sessionrecord);
     SaveData(accounts);
+    UserList* current = accounts;
+    while (current != nullptr) {
+        FreeHistory(current->data); 
+        UserList* temp = current;
+        current = current->next;
+        delete temp; 
+    }
+    accounts = nullptr;
 }
