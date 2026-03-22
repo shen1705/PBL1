@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 #include "Data.h"
-
+using namespace std;
 //utils
 void clearScreen();
 void pauseScreen();

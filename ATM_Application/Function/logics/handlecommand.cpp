@@ -28,6 +28,7 @@ void handlecommand(const string &cmd, int &running, User &current, int &user_sta
     }
     else
         cout << "Unknown command." << endl;
+        delay(2);
 }
 void shutdown(int &running)
 {
