@@ -4,65 +4,29 @@
 #include <string>
 #include <iostream>
 #include <limits>
-#include <termios.h>
+#include <conio.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <cctype>
 using namespace std;
 
-// Hàm này thay thế hoàn toàn getch() trên Mac
-static int getch() {
-    struct termios oldt, newt;
-    int ch;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return ch;
-}
-
-static string readMaskedInput(bool digitsOnly)
-{
-    string value;
-    while (true)
-    {
-        int ch = getch();
-
-        // macOS/Linux Enter is '\n' (10); some terminals may still report '\r' (13).
-        if (ch == '\n' || ch == '\r')
-        {
-            break;
-        }
-
-        // Backspace is usually 127 on macOS terminal, sometimes 8.
-        if (ch == 127 || ch == 8)
-        {
-            if (!value.empty())
-            {
-                value.pop_back();
-                cout << "\b \b";
+string getHiddenInput() {
+    string input = "";
+    char ch;
+    
+    while ((ch = _getch()) != '\r') {
+        if (ch == '\b') { //backspace
+            if (input.length() > 0) {
+                input.pop_back(); 
+                cout << "\b \b";  
             }
-            continue;
+        } else if (ch != '\n') { 
+            input += ch;
+            cout << "*"; // *
         }
-
-        if (ch < 32 || ch > 126)
-        {
-            continue;
-        }
-
-        if (digitsOnly && !isdigit(static_cast<unsigned char>(ch)))
-        {
-            continue;
-        }
-
-        value += static_cast<char>(ch);
-        cout << '*';
     }
-
     cout << endl;
-    return value;
+    return input;
 }
 
 int ITauth() {
@@ -72,15 +36,15 @@ int ITauth() {
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
 
-    password = readMaskedInput(false);
+    password = getHiddenInput();
 
     if (password == system_password) {
         cout << "Access Granted." << endl;
-        delay(2);
+        delay(3);
         return 1;
     } else {
         cout << "Access Denied." << endl;
-        delay(2);
+        delay(3);
         return 0;
     }
 }
@@ -106,7 +70,7 @@ int Login(UserList* accounts, User *&currentUser)
     catch (...)
     {
         cout << "Invalid Input. Please enter a number." << endl;
-        delay(2);
+        delay(3);
         return 0;
     }
     //search
@@ -126,7 +90,7 @@ int Login(UserList* accounts, User *&currentUser)
     if (found)
     {
         cout << "Enter PIN: ";
-        string pinStr = readMaskedInput(true);
+        string pinStr = getHiddenInput();
         if (pinStr.empty())
         {
             return 0;

@@ -79,7 +79,7 @@ int Record(SessionRecord *RecordNode)
              << setfill('0') << setw(2) << ltm->tm_mday << "_"
              << setfill('0') << setw(2) << ltm->tm_hour << "-"
              << setfill('0') << setw(2) << ltm->tm_min << "-"
-             << setfill('0') << setw(2) << ltm->tm_sec << ".txt";
+             << setfill('0') << setw(2) << ltm->tm_sec << ".dat";
     ofstream record(filename.str(), ios::out);
     if (!record) return 0;
     
