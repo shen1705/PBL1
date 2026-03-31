@@ -9,27 +9,23 @@ using namespace std;
 
 void handlecommand(const string &cmd, int &running, User &current, int &user_status, SessionRecord *&Record)
 {
-    if (cmd == "deposit")
+    if (cmd == "1") // Deposit - gui tien 
         transaction(current, deposit, 'd', Record);
-    else if (cmd == "withdraw")
+    else if (cmd == "2") //Withdraw - rut tien
         transaction(current, withdraw, 'w', Record);
-    else if (cmd == "history")
+    else if (cmd == "3") // Show History
         ShowHistory(current);
-    else if (cmd == "exit" || cmd == "logout")
+    else if (cmd == "4") // log out
     {
         user_status = 0;
     }
-    else if (cmd == "shutdown")
-    {
-        if (ITauth())
-            shutdown(running);
-        else
-            cout << "Authorization is failed" << std::endl;
-    }
     else
-        cout << "Unknown command." << endl;
-        delay(2);
+    {
+        cout << "Invalid Option." << endl;
+        delay(3);
+    }
 }
+
 void shutdown(int &running)
 {
     running = 0;
@@ -113,13 +109,13 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
         }
         else
         {
-            delay(2);
+            delay(3);
         }
     }
     else
     {
         cout << "Transaction limit reached" << endl;
-        delay(2);
+        delay(3);
     }
 }
 void TransUpdt(User &U, double amount, char type)

@@ -69,10 +69,10 @@ void TransactionRecordRow(ostream &os, int accnum, string typeStr, double amount
 void drawMenuBox()
 {
     clearScreen();
-    drawTitle(cout, "WELCOME TO MY ATM PROGRAM");
+    drawTitle(cout, "WELCOME TO MY_ATM PROGRAM");
     drawDivider(cout, 60, '-');
     const int width = 60;
-    cout << "| " << left << setw(width - 4) << "1. Login - Type 1 to Login" << " |" << endl;
+    cout << "| " << left << setw(width - 4) << "1. Start Session - Type 1 to Start a Session" << " |" << endl;
     cout << "| " << left << setw(width - 4) << "0. Shutdown - Type 0 to shutdown the program" << " |" << endl;
     cout << "+" << string(width - 2, '=') << "+" << endl;
 }
@@ -82,7 +82,7 @@ void drawUserBox(int accnum, double balance, int maxtrans)
     clearScreen();
     const int width = 60;
 
-    drawTitle(cout, "Account Number: " + to_string(accnum));
+    drawTitle(cout, "ACCOUNT NUMBER: " + to_string(accnum));
     drawDivider(cout, width, '-');
 
     string balStr = "Balance: " + to_string(balance);
@@ -91,10 +91,10 @@ void drawUserBox(int accnum, double balance, int maxtrans)
     cout << "| " << left << setw(width - 4) << limStr << " |" << endl;
     cout << "|" << string(width - 2, '-') << "|" << endl;
 
-    cout << "| " << left << setw(width - 4) << "deposit  - Deposit money" << " |" << endl;
-    cout << "| " << left << setw(width - 4) << "withdraw - Withdraw money" << " |" << endl;
-    cout << "| " << left << setw(width - 4) << "history  - Show transactions" << " |" << endl;
-    cout << "| " << left << setw(width - 4) << "exit     - Log out" << " |" << endl;
+    cout << "| " << left << setw(width - 4) << "1. deposit  - Deposit money - Gửi tiền" << " |" << endl;
+    cout << "| " << left << setw(width - 4) << "2. withdraw - Withdraw money - Rút tiền" << " |" << endl;
+    cout << "| " << left << setw(width - 4) << "3. history  - Show transactions - Lịch sử giao dịch" << " |" << endl;
+    cout << "| " << left << setw(width - 4) << "4. exit     - Log out - Đăng xuất" << " |" << endl;
     cout << "+" << string(width - 2, '=') << "+" << endl;
 }
 

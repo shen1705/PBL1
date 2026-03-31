@@ -10,22 +10,22 @@
 
 using namespace std;
 
-
+// Customer Session (LOGIN)
 void RunUserSession(User* currentUser, int& system_running, SessionRecord*& sessionRec) 
 {
     int user_status = 1; 
-    
-
     while (user_status) 
     {
         drawUserBox(currentUser->accnum, currentUser->balance, currentUser->maxtrans);
         string cmd;
-        cout << "ATM>";
-        cin >> cmd;
-        
+        cout << "\nSelect Option: ";
+        if (!(cin >> cmd)) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         handlecommand(cmd, system_running, *currentUser, user_status, sessionRec);
-        
-        // Kích hoạt khi user nhập "shutdown" từ bên trong tài khoản
         if (system_running == 0) {
             break; 
         }
@@ -39,13 +39,14 @@ void runATM()
     UserList* accounts = nullptr; 
     if (!LoadData(accounts))
     {
-        cout << "cant load data from file";
+        cout << "cant load data from file"<<endl;
+        delay(2);
+        return;
     }
-    
     SessionRecord *sessionRec = nullptr; 
     int system_running = 1;
+    cout<< "SYSTEM STARTED";
     User *currentUser = nullptr;
-
 
     while (system_running)
     {
@@ -67,20 +68,20 @@ void runATM()
             int LoggedIn = Login(accounts, currentUser);
             if (LoggedIn == 1 && currentUser != nullptr)
             {
-              
-                RunUserSession(currentUser, system_running, sessionRec);
+                int dummy_system=1 ;
+                RunUserSession(currentUser, dummy_system, sessionRec);
             }
         }
         else if (menuOption == "0")
         {
-            if (ITauth())
-            {
+            cout << "\n[SYSTEM] Exit Attempt." << endl;
+            if (ITauth()) {
                 system_running = 0; 
             }
         }
         else {
-            cout<<"Invalid Option."<<endl;
-            delay(3);
+            cout << "Invalid Option." << endl;
+            delay(2);
         }
     }
     
@@ -96,4 +97,45 @@ void runATM()
         delete temp; 
     }
     accounts = nullptr;
+}
+
+void BootSystem()
+{
+system("cls");
+    cout << "=== SYSTEM BOOTING ===" << endl;
+    if (!ITauth()) {
+        cout << "Fatal Error: IT Authentication Failed. Shutting down hardware..." << endl;
+        delay(3);
+        return; //exit 
+    }
+    int hardware_running = 1;
+    while (hardware_running)
+    {
+        system("cls");
+        cout << "=================================" << endl;
+        cout << "         IT ADMIN MENU           " << endl;
+        cout << "=================================" << endl;
+        cout << "[1]. Start ATM Session (Launch UI)" << endl;
+        cout << "[0]. Shutdown Entire Hardware" << endl;
+        cout << "=================================" << endl;
+        
+        string cmd;
+        cout << "Admin> ";
+        cin >> cmd;
+
+        if (cmd == "1") {
+            //run atm
+            runATM(); 
+        }
+
+        else if (cmd == "0") {
+            cout << "Shutting down all hardware components..." << endl;
+            delay(2);
+            hardware_running = 0; 
+        }
+        else {
+            cout << "Invalid." << endl;
+            delay(2);
+        }
+    }
 }
