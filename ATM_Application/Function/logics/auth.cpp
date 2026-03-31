@@ -52,9 +52,11 @@ int Login(UserList* accounts, User *&currentUser)
 {
     string input;
     int accnum;
-    cout << "\n===== LOGIN REQUIRED =====" << endl;
-    cout << "Please login for further actions" << endl;
-    cout << "Enter your account number: ";
+    
+    cout << "\n===== WELCOME TO ATM =====" << endl;
+    cout << "Please enter your Account Number to proceed." << endl;
+    cout << "Acc Num: ";
+    
     if (!(cin >> input))
     {
         cin.clear();
@@ -63,17 +65,26 @@ int Login(UserList* accounts, User *&currentUser)
     }
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
+    if (input == "admin" || input == "IT")//hidden input
+    {
+        cout << "\n[SYSTEM] Maintenance Mode Requested." << endl;
+        if (ITauth()) {
+            return -1; 
+        }
+        return 0;
+    }
+
     try
     {
         accnum = stoi(input);
     }
     catch (...)
     {
-        cout << "Invalid Input. Please enter a number." << endl;
-        delay(3);
+        cout << "Invalid Input. Please enter a valid account number." << endl;
+        delay(2);
         return 0;
     }
-    //search
+
     UserList* current = accounts;
     bool found = false;
 
@@ -91,21 +102,11 @@ int Login(UserList* accounts, User *&currentUser)
     {
         cout << "Enter PIN: ";
         string pinStr = getHiddenInput();
-        if (pinStr.empty())
-        {
-            return 0;
-        }
+        if (pinStr.empty()) return 0;
 
         int pin;
-        try
-        {
-            pin = stoi(pinStr);
-        }
-        catch (...)
-        {
-            loginfailedannounce();
-            return 0;
-        }
+        try { pin = stoi(pinStr); }
+        catch (...) { loginfailedannounce(); return 0; }
 
         if (pin == current->data.PIN)
         {
@@ -115,7 +116,7 @@ int Login(UserList* accounts, User *&currentUser)
         else
         {
             loginfailedannounce();
-            return 0;
+            return 0; 
         }
     }
     else

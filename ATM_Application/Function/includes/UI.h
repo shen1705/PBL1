@@ -12,6 +12,7 @@ void drawDivider(std::ostream &os, int width, char symbol);
 void History(std::ostream &os, int no, double amount, std::string type);
 void TransactionRecordRow(ostream &os, int accnum, string typeStr, double amount);
 // Main 
+void systemMenu();
 void drawMenuBox();
 void drawUserBox(int accnum, double balance, int maxtrans);
 void showMessageAndDelay();

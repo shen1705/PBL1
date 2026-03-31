@@ -37,54 +37,35 @@ void RunUserSession(User* currentUser, int& system_running, SessionRecord*& sess
 void runATM()
 {
     UserList* accounts = nullptr; 
-    if (!LoadData(accounts))
-    {
-        cout << "cant load data from file"<<endl;
+    if (!LoadData(accounts)) {
+        cout << "Can't load data from file!" << endl;
         delay(2);
-        return;
+        return; 
     }
+    
     SessionRecord *sessionRec = nullptr; 
-    int system_running = 1;
-    cout<< "SYSTEM STARTED";
+    int atm_running = 1;
     User *currentUser = nullptr;
-
-    while (system_running)
+    
+    while (atm_running)
     {
         system("cls");
-        drawMenuBox();
-        string menuOption;
-        cout << "Select Option: ";
-
-        if (!(cin >> menuOption))
-        {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            continue;
-        }
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        drawMenuBox(); 
         
-        if (menuOption == "1")
+        int login_status = Login(accounts, currentUser);
+        
+        if (login_status == 1 && currentUser != nullptr)
         {
-            int LoggedIn = Login(accounts, currentUser);
-            if (LoggedIn == 1 && currentUser != nullptr)
-            {
-                int dummy_system=1 ;
-                RunUserSession(currentUser, dummy_system, sessionRec);
-            }
+            int dummy_system = 1; 
+            RunUserSession(currentUser, dummy_system, sessionRec);
         }
-        else if (menuOption == "0")
+        else if (login_status == -1)
         {
-            cout << "\n[SYSTEM] Exit Attempt." << endl;
-            if (ITauth()) {
-                system_running = 0; 
-            }
-        }
-        else {
-            cout << "Invalid Option." << endl;
-            delay(2);
+            atm_running = 0; 
         }
     }
     
+
     SaveData(accounts);
     Record(sessionRec);
     shutdownAnnounce();
@@ -99,6 +80,7 @@ void runATM()
     accounts = nullptr;
 }
 
+
 void BootSystem()
 {
 system("cls");
@@ -111,23 +93,14 @@ system("cls");
     int hardware_running = 1;
     while (hardware_running)
     {
-        system("cls");
-        cout << "=================================" << endl;
-        cout << "         IT ADMIN MENU           " << endl;
-        cout << "=================================" << endl;
-        cout << "[1]. Start ATM Session (Launch UI)" << endl;
-        cout << "[0]. Shutdown Entire Hardware" << endl;
-        cout << "=================================" << endl;
-        
+        systemMenu();
         string cmd;
         cout << "Admin> ";
         cin >> cmd;
-
         if (cmd == "1") {
             //run atm
             runATM(); 
         }
-
         else if (cmd == "0") {
             cout << "Shutting down all hardware components..." << endl;
             delay(2);

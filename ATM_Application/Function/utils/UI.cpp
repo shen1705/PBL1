@@ -72,8 +72,8 @@ void drawMenuBox()
     drawTitle(cout, "WELCOME TO MY_ATM PROGRAM");
     drawDivider(cout, 60, '-');
     const int width = 60;
-    cout << "| " << left << setw(width - 4) << "1. Start Session - Type 1 to Start a Session" << " |" << endl;
-    cout << "| " << left << setw(width - 4) << "0. Shutdown - Type 0 to shutdown the program" << " |" << endl;
+    cout << "| " << left << setw(width - 4) << "1. Login - Type 1 to Login" << " |" << endl;
+    cout << "| " << left << setw(width - 4) << "0. Exit - Type 0 to Exit (Permission required)" << " |" << endl;
     cout << "+" << string(width - 2, '=') << "+" << endl;
 }
 
@@ -127,4 +127,15 @@ void shutdownAnnounce()
         cout << "Shutting down in " << i << endl;
         delay(1);
     }
+}
+
+void systemMenu()
+{
+     system("cls");
+        cout << "=================================" << endl;
+        cout << "         IT ADMIN MENU           " << endl;
+        cout << "=================================" << endl;
+        cout << "[1]. Start ATM Session (Launch UI)" << endl;
+        cout << "[0]. Shutdown Entire Hardware" << endl;
+        cout << "=================================" << endl;
 }
