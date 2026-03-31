@@ -4,29 +4,64 @@
 #include <string>
 #include <iostream>
 #include <limits>
-#include <conio.h>
+#include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <cctype>
 using namespace std;
 
-string getHiddenInput() {
-    string input = "";
-    char ch;
-    
-    while ((ch = _getch()) != '\r') {
-        if (ch == '\b') { //backspace
-            if (input.length() > 0) {
-                input.pop_back(); 
-                cout << "\b \b";  
-            }
-        } else if (ch != '\n') { 
-            input += ch;
-            cout << "*"; // *
+static int getch() {
+    struct termios oldt, newt;
+    int ch;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+    ch = getchar();
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    return ch;
+}
+
+static string readMaskedInput(bool digitsOnly)
+{
+    string value;
+    while (true)
+    {
+        int ch = getch();
+
+        // macOS/Linux Enter is '\n' (10); some terminals may still report '\r' (13).
+        if (ch == '\n' || ch == '\r')
+        {
+            break;
         }
+
+        // Backspace is usually 127 on macOS terminal, sometimes 8.
+        if (ch == 127 || ch == 8)
+        {
+            if (!value.empty())
+            {
+                value.pop_back();
+                cout << "\b \b";
+            }
+            continue;
+        }
+
+        if (ch < 32 || ch > 126)
+        {
+            continue;
+        }
+
+        if (digitsOnly && !isdigit(static_cast<unsigned char>(ch)))
+        {
+            continue;
+        }
+
+        value += static_cast<char>(ch);
+        cout << '*';
     }
+
     cout << endl;
-    return input;
+    return value;
 }
 
 int ITauth() {
@@ -36,7 +71,7 @@ int ITauth() {
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
 
-    password = getHiddenInput();
+    password = readMaskedInput(false);
 
     if (password == system_password) {
         cout << "Access Granted." << endl;
@@ -101,7 +136,7 @@ int Login(UserList* accounts, User *&currentUser)
     if (found)
     {
         cout << "Enter PIN: ";
-        string pinStr = getHiddenInput();
+        string pinStr = readMaskedInput(true);
         if (pinStr.empty()) return 0;
 
         int pin;
