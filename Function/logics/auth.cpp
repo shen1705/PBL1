@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <limits>
-#include <termios.h>
+#include <conio.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <cctype>
@@ -44,81 +44,56 @@ static void drawCredentialBox(const string &accNumValue, const string &pinValue,
     drawLoginFieldLine("Enter PIN: ", pinValue);
     cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
 }
-
-static int getch() {
-    struct termios oldt, newt;
-    int ch;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return ch;
-}
-
-static string readMaskedInput(bool digitsOnly)
+string readMaskedInput()
 {
-    string value;
-    while (true)
+    string input = "";
+    char ch;
+
+    while ((ch = _getch()) != '\r')
     {
-        int ch = getch();
-
-        // macOS/Linux Enter is '\n' (10); some terminals may still report '\r' (13).
-        if (ch == '\n' || ch == '\r')
-        {
-            break;
-        }
-
-        // Backspace is usually 127 on macOS terminal, sometimes 8.
-        if (ch == 127 || ch == 8)
-        {
-            if (!value.empty())
+        if (ch == '\b')
+        { // backspace
+            if (input.length() > 0)
             {
-                value.pop_back();
+                input.pop_back();
                 cout << "\b \b";
             }
-            continue;
         }
-
-        if (ch < 32 || ch > 126)
+        else if (ch != '\n')
         {
-            continue;
+            input += ch;
+            cout << "*"; // *
         }
-
-        if (digitsOnly && !isdigit(static_cast<unsigned char>(ch)))
-        {
-            continue;
-        }
-
-        value += static_cast<char>(ch);
-        cout << '*';
     }
 
     cout << endl;
-    return value;
+    return input;
 }
 
-int ITauth() {
+int ITauth()
+{
     const string system_password = "12345";
     string password;
 
     cout << "IT AUTHENTICATION REQUIRED" << endl;
     cout << "Enter IT password: ";
 
-    password = readMaskedInput(false);
+    password = readMaskedInput();
 
-    if (password == system_password) {
+    if (password == system_password)
+    {
         cout << "Access Granted." << endl;
         delay(3);
         return 1;
-    } else {
+    }
+    else
+    {
         cout << "Access Denied." << endl;
         delay(3);
         return 0;
     }
 }
-int Login(UserList* accounts, User *&currentUser)
+int Login(UserList *accounts, User *&currentUser)
 {
     string input;
     int accnum;
@@ -135,8 +110,9 @@ int Login(UserList* accounts, User *&currentUser)
     {
         drawCredentialBox(input, "", "Yeu cau xac thuc IT.");
         cout << "\n[SYSTEM] IT authentication requested." << endl;
-        if (ITauth()) {
-            return -1; 
+        if (ITauth())
+        {
+            return -1;
         }
         return 0;
     }
@@ -152,7 +128,7 @@ int Login(UserList* accounts, User *&currentUser)
         return 0;
     }
 
-    UserList* current = accounts;
+    UserList *current = accounts;
     bool found = false;
 
     while (current != nullptr)
@@ -169,12 +145,20 @@ int Login(UserList* accounts, User *&currentUser)
     {
         drawCredentialBox(to_string(accnum), "", "Tai khoan hop le. Vui long nhap PIN.");
         cout << "| Enter PIN: ";
-        string pinStr = readMaskedInput(true);
-        if (pinStr.empty()) return 0;
+        string pinStr = readMaskedInput();
+        if (pinStr.empty())
+            return 0;
 
         int pin;
-        try { pin = stoi(pinStr); }
-        catch (...) { loginfailedannounce(); return 0; }
+        try
+        {
+            pin = stoi(pinStr);
+        }
+        catch (...)
+        {
+            loginfailedannounce();
+            return 0;
+        }
 
         if (pin == current->data.PIN)
         {
@@ -186,7 +170,7 @@ int Login(UserList* accounts, User *&currentUser)
         {
             drawCredentialBox(to_string(accnum), string(pinStr.size(), '*'), "PIN khong dung. Vui long thu lai.");
             loginfailedannounce();
-            return 0; 
+            return 0;
         }
     }
     else
