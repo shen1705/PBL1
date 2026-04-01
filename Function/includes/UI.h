@@ -20,3 +20,5 @@ void logoutannounce();
 void loginfailedannounce(); 
 void shutdownAnnounce();    
 void delay(int seconds);
+void drawProjectIntro();
+void drawLoginPromptBox();

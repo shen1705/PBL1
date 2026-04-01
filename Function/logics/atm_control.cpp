@@ -49,9 +49,6 @@ void runATM()
     
     while (atm_running)
     {
-        system("cls");
-        drawMenuBox(); 
-        
         int login_status = Login(accounts, currentUser);
         
         if (login_status == 1 && currentUser != nullptr)
@@ -83,7 +80,7 @@ void runATM()
 
 void BootSystem()
 {
-system("cls");
+    drawProjectIntro();
     cout << "=== SYSTEM BOOTING ===" << endl;
     if (!ITauth()) {
         cout << "Fatal Error: IT Authentication Failed. Shutting down hardware..." << endl;

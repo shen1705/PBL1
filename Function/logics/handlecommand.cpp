@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <limits>
+#include <iomanip>
 using namespace std;
 
 void handlecommand(const string &cmd, int &running, User &current, int &user_status, SessionRecord *&Record)
@@ -32,15 +33,31 @@ void shutdown(int &running)
 }
 void ShowHistory(User &U)
 {
+    const int width = 100;
+    const int col1 = 10;
+    const int col2 = 30;
+    const int col3 = 56;
+
+    clearScreen();
     int i = 1;
     TransactionList *current = U.List;
     if (current == nullptr)
     {
-        cout << "No history found." << endl;
-        delay(2);
+        drawTitle(cout, "TRANSACTION HISTORY");
+        drawDivider(cout, width, '-');
+        cout << "| " << left << setw(width - 4) << "Ban chua co lich su giao dich nao." << " |" << endl;
+        cout << "+" << string(width - 2, '=') << "+" << endl;
+        pauseScreen();
         return;
     }
-    drawTitle(cout, "Transaction History");
+
+    drawTitle(cout, "TRANSACTION HISTORY");
+    drawDivider(cout, width, '-');
+    cout << "|" << left << setw(col1) << " STT"
+         << "|" << left << setw(col2) << " LOAI GIAO DICH"
+         << "|" << right << setw(col3) << " SO TIEN" << "|" << endl;
+    drawDivider(cout, width, '-');
+
     while (current != nullptr)
     {
         string typeStr = (current->type == 'd') ? "Deposit" : "Withdraw";
@@ -48,7 +65,8 @@ void ShowHistory(User &U)
         i++;
         current = current->next;
     }
-    cout << "+" << string(58, '=') << "+" << endl;
+
+    cout << "+" << string(width - 2, '=') << "+" << endl;
     pauseScreen();
 }
 

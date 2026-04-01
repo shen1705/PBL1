@@ -8,7 +8,42 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <cctype>
+#include <iomanip>
 using namespace std;
+
+static const int LOGIN_FRAME_WIDTH = 100;
+
+static void drawLoginFieldLine(const string &label, const string &value)
+{
+    const int innerWidth = LOGIN_FRAME_WIDTH - 4;
+    string line = label + value;
+    if (static_cast<int>(line.size()) > innerWidth)
+    {
+        line = line.substr(0, innerWidth);
+    }
+    cout << "| " << left << setw(innerWidth) << line << " |" << endl;
+}
+
+static void drawCredentialBox(const string &accNumValue, const string &pinValue, const string &note)
+{
+    clearScreen();
+    cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
+    cout << "| " << left << setw(LOGIN_FRAME_WIDTH - 4) << "WELCOME TO ATM" << " |" << endl;
+    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
+    if (!note.empty())
+    {
+        drawLoginFieldLine("Thong bao: ", note);
+    }
+    else
+    {
+        drawLoginFieldLine("Thong bao: ", "Vui long nhap thong tin dang nhap.");
+    }
+    drawLoginFieldLine("Huong dan: ", "Nhap 'IT' tai Acc Num neu can xac thuc IT.");
+    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
+    drawLoginFieldLine("Acc Num  : ", accNumValue);
+    drawLoginFieldLine("Enter PIN: ", pinValue);
+    cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
+}
 
 static int getch() {
     struct termios oldt, newt;
@@ -87,22 +122,19 @@ int Login(UserList* accounts, User *&currentUser)
 {
     string input;
     int accnum;
-    
-    cout << "\n===== WELCOME TO ATM =====" << endl;
-    cout << "Please enter your Account Number to proceed." << endl;
-    cout << "Acc Num: ";
-    
-    if (!(cin >> input))
+
+    drawCredentialBox("", "", "Nhap Acc Num roi nhan Enter.");
+    cout << "| Acc Num  : ";
+    if (!getline(cin >> ws, input))
     {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         return 0;
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-    if (input == "admin" || input == "IT")//hidden input
+    if (input == "IT")
     {
-        cout << "\n[SYSTEM] Maintenance Mode Requested." << endl;
+        drawCredentialBox(input, "", "Yeu cau xac thuc IT.");
+        cout << "\n[SYSTEM] IT authentication requested." << endl;
         if (ITauth()) {
             return -1; 
         }
@@ -135,7 +167,8 @@ int Login(UserList* accounts, User *&currentUser)
 
     if (found)
     {
-        cout << "Enter PIN: ";
+        drawCredentialBox(to_string(accnum), "", "Tai khoan hop le. Vui long nhap PIN.");
+        cout << "| Enter PIN: ";
         string pinStr = readMaskedInput(true);
         if (pinStr.empty()) return 0;
 
@@ -145,11 +178,13 @@ int Login(UserList* accounts, User *&currentUser)
 
         if (pin == current->data.PIN)
         {
+            drawCredentialBox(to_string(accnum), string(pinStr.size(), '*'), "Dang nhap thanh cong.");
             currentUser = &(current->data);
             return 1;
         }
         else
         {
+            drawCredentialBox(to_string(accnum), string(pinStr.size(), '*'), "PIN khong dung. Vui long thu lai.");
             loginfailedannounce();
             return 0; 
         }

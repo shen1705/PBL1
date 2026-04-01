@@ -24,7 +24,7 @@ int LoadData(UserList* &accounts)
         stringstream data(line);
         string temp;
         User U;
-        U.maxtrans = 5;
+        U.maxtrans = 10;
 
         getline(data, temp, '|');
         U.accnum = stoi(temp);
@@ -88,10 +88,10 @@ int Record(SessionRecord *RecordNode)
     record << "Session Time: " 
            << 1900 + ltm->tm_year << "-" << 1 + ltm->tm_mon << "-" << ltm->tm_mday << " "
            << ltm->tm_hour << ":" << ltm->tm_min << ":" << ltm->tm_sec << endl << endl;
-    const int width = 60;
-    const int col1 = 18;
-    const int col2 = 10;
-    const int col3 = 28;
+        const int width = 100;
+        const int col1 = 30;
+        const int col2 = 24;
+        const int col3 = 42;
     string title = "Transaction Record";
     
     drawTitle(record, title);
