@@ -34,6 +34,7 @@ void RunUserSession(User* currentUser, int& system_running, SessionRecord*& sess
 }
 
 
+
 void runATM()
 {
     UserList* accounts = nullptr; 
@@ -42,7 +43,6 @@ void runATM()
         delay(2);
         return; 
     }
-    
     SessionRecord *sessionRec = nullptr; 
     int atm_running = 1;
     User *currentUser = nullptr;
@@ -79,7 +79,7 @@ void runATM()
 
 
 void BootSystem()
-{
+{   clearScreen();
     drawProjectIntro();
     cout << "=== SYSTEM BOOTING ===" << endl;
     if (!ITauth()) {
@@ -101,6 +101,7 @@ void BootSystem()
         else if (cmd == "0") {
             cout << "Shutting down all hardware components..." << endl;
             delay(2);
+            clearScreen();
             hardware_running = 0; 
         }
         else {

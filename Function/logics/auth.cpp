@@ -11,40 +11,6 @@
 #include <iomanip>
 using namespace std;
 
-static const int LOGIN_FRAME_WIDTH = 100;
-
-static void drawLoginFieldLine(const string &label, const string &value)
-{
-    const int innerWidth = LOGIN_FRAME_WIDTH - 4;
-    string line = label + value;
-    if (static_cast<int>(line.size()) > innerWidth)
-    {
-        line = line.substr(0, innerWidth);
-    }
-    cout << "| " << left << setw(innerWidth) << line << " |" << endl;
-}
-
-static void drawCredentialBox(const string &accNumValue, const string &pinValue, const string &note)
-{
-    clearScreen();
-    cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
-    cout << "| " << left << setw(LOGIN_FRAME_WIDTH - 4) << "WELCOME TO ATM" << " |" << endl;
-    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
-    if (!note.empty())
-    {
-        drawLoginFieldLine("Thong bao: ", note);
-    }
-    else
-    {
-        drawLoginFieldLine("Thong bao: ", "Vui long nhap thong tin dang nhap.");
-    }
-    drawLoginFieldLine("Huong dan: ", "Nhap 'IT' tai Acc Num neu can xac thuc IT.");
-    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
-    drawLoginFieldLine("Acc Num  : ", accNumValue);
-    drawLoginFieldLine("Enter PIN: ", pinValue);
-    cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
-}
-
 static int getch() {
     struct termios oldt, newt;
     int ch;

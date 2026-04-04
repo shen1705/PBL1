@@ -12,6 +12,8 @@
 using namespace std;
 
 static const int FRAME_WIDTH = 100;
+static const int LOGIN_FRAME_WIDTH = 100;
+
 
 static void drawFrameTop(ostream &os)
 {
@@ -100,6 +102,36 @@ void TransactionRecordRow(ostream &os, int accnum, string typeStr, double amount
 }
 
 // Main UI 
+void drawLoginFieldLine(const string &label, const string &value)
+{
+    const int innerWidth = LOGIN_FRAME_WIDTH - 4;
+    string line = label + value;
+    if (static_cast<int>(line.size()) > innerWidth)
+    {
+        line = line.substr(0, innerWidth);
+    }
+    cout << "| " << left << setw(innerWidth) << line << " |" << endl;
+}
+
+void drawCredentialBox(const string &accNumValue, const string &pinValue, const string &note)
+{
+    clearScreen();
+    cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
+    cout << "| " << left << setw(LOGIN_FRAME_WIDTH - 4) << "WELCOME TO ATM" << " |" << endl;
+    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
+    if (!note.empty())
+    {
+        drawLoginFieldLine("Thong bao: ", note);
+    }
+    else
+    {
+        drawLoginFieldLine("Thong bao: ", "Vui long nhap thong tin dang nhap.");
+    }
+    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
+    drawLoginFieldLine("Acc Num  : ", accNumValue);
+    drawLoginFieldLine("Enter PIN: ", pinValue);
+    cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
+}
 
 void drawProjectIntro()
 {
@@ -113,19 +145,11 @@ void drawProjectIntro()
     drawFrameTextLine(cout, "");
     drawFrameCenteredLine(cout, "SINH VIEN THUC HIEN: NGUYEN XUAN AN");
     drawFrameCenteredLine(cout, "NGUYEN HOANG MINH");
+    drawFrameTextLine(cout, "");
+    drawFrameCenteredLine(cout,"KHOA: FAST");
+    drawFrameCenteredLine(cout,"LOP: 23PFIEV3");
     drawFrameBottom(cout);
     cout << endl;
-}
-
-void drawMenuBox()
-{
-    clearScreen();
-    drawTitle(cout, "WELCOME TO ATM");
-    drawDivider(cout, FRAME_WIDTH, '-');
-    drawFrameCenteredLine(cout, "DANG NHAP TAI KHOAN");
-    drawFrameTextLine(cout, "");
-    drawFrameTextLine(cout, "Vui long nhap thong tin trong khung ben duoi de tiep tuc.");
-    drawFrameBottom(cout);
 }
 
 void drawUserBox(int accnum, double balance, int maxtrans)
@@ -144,15 +168,6 @@ void drawUserBox(int accnum, double balance, int maxtrans)
     drawFrameTextLine(cout, "2. Withdraw money - Rut tien");
     drawFrameTextLine(cout, "3. Show transactions - Lich su giao dich");
     drawFrameTextLine(cout, "4. Log out - Dang xuat");
-    drawFrameBottom(cout);
-}
-
-void drawLoginPromptBox()
-{
-    drawTitle(cout, "WELCOME TO ATM");
-    drawDivider(cout, FRAME_WIDTH, '-');
-    drawFrameTextLine(cout, "Nhap Acc Num va PIN ngay trong khung ben duoi.");
-    drawFrameTextLine(cout, "Goi IT: nhap chinh xac 'IT' tai o Acc Num.");
     drawFrameBottom(cout);
 }
 
