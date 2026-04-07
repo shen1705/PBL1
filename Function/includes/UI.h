@@ -15,7 +15,6 @@ void TransactionRecordRow(ostream &os, int accnum, string typeStr, double amount
 // Main 
 void drawLoginFieldLine(const string &label, const string &value);
 void drawCredentialBox(const string &accNumValue, const string &pinValue, const string &note);
-void systemMenu();
 void drawUserBox(int accnum, double balance, int maxtrans);
 void showMessageAndDelay();
 void logoutannounce();      

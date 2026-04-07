@@ -116,8 +116,24 @@ void drawCredentialBox(const string &accNumValue, const string &pinValue, const 
 {
     clearScreen();
     cout << "+" << string(LOGIN_FRAME_WIDTH - 2, '=') << "+" << endl;
-    cout << "| " << left << setw(LOGIN_FRAME_WIDTH - 4) << "WELCOME TO ATM" << " |" << endl;
+    
+    // ASCII Logo
+    drawFrameCenteredLine(cout, "      $$$$$$\\ $$$$$$$$\\ $$\\      $$\\       ");
+    drawFrameCenteredLine(cout, "     $$  __$$\\\\__$$  __|$$$\\    $$$ |      ");
+    drawFrameCenteredLine(cout, "     $$ /  $$ |  $$ |   $$$$\\  $$$$ |      ");
+    drawFrameCenteredLine(cout, "     $$$$$$$$ |  $$ |   $$\\$$\\$$ $$ |      ");
+    drawFrameCenteredLine(cout, "     $$  __$$ |  $$ |   $$ \\$$$  $$ |      ");
+    drawFrameCenteredLine(cout, "     $$ |  $$ |  $$ |   $$ |\\$  /$$ |      ");
+    drawFrameCenteredLine(cout, "     \\__|  \\__|  \\__|   \\__|     \\__|      ");
+    
+    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, ' ') << "|" << endl;
+    drawFrameCenteredLine(cout, "MY_ATM BANKING SYSTEM - SECURE TERMINAL");
     cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
+    
+    drawFrameCenteredLine(cout, "Hotline: 0898200800 | Support: 123230138@sv1.dut.udn.vn");
+    drawFrameCenteredLine(cout, "WARNING: DO NOT SHARE YOUR PIN WITH ANYONE");
+    cout << "|" << string(LOGIN_FRAME_WIDTH - 2, '-') << "|" << endl;
+
     if (!note.empty())
     {
         drawLoginFieldLine("Thong bao: ", note);
@@ -190,23 +206,10 @@ void loginfailedannounce()
 
 void shutdownAnnounce()
 {
-    clearScreen();
-    cout << "Saving DATA..." << endl;
-    delay(2);
     for (int i = 3; i > 0; i--)
     {
         clearScreen();
         cout << "Shutting down in " << i << endl;
         delay(1);
     }
-}
-
-void systemMenu()
-{
-    clearScreen();
-    drawTitle(cout, "IT ADMIN MENU");
-    drawDivider(cout, FRAME_WIDTH, '-');
-    drawFrameTextLine(cout, "1. Start ATM Session (Launch UI)");
-    drawFrameTextLine(cout, "0. Shutdown Entire Hardware");
-    drawFrameBottom(cout);
 }
