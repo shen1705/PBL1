@@ -3,7 +3,7 @@
 #include "Data.h"
 
 
-void handlecommand(const std::string &cmd, int &running,User &current,int &user_status, SessionRecord *&Record);
+void handlecommand(const std::string &cmd,User &current,int &user_status, SessionRecord *&Record);
 
 // Data
 void ShowHistory(User &U);
@@ -18,4 +18,3 @@ void transaction(User &U, int (*type)(User&, double), char transtype,SessionReco
 // Record
 void TransUpdt(User &U, double amount, char type);
 void TransRecord(User &U, double amount,SessionRecord *&Record,char type);
-void shutdown(int &running);

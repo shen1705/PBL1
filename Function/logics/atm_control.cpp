@@ -11,7 +11,7 @@
 using namespace std;
 
 // Customer Session (LOGIN)
-void RunUserSession(User* currentUser, int& system_running, SessionRecord*& sessionRec) 
+void RunUserSession(User* currentUser, SessionRecord*& sessionRec) 
 {
     int user_status = 1; 
     while (user_status) 
@@ -25,10 +25,7 @@ void RunUserSession(User* currentUser, int& system_running, SessionRecord*& sess
             continue;
         }
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        handlecommand(cmd, system_running, *currentUser, user_status, sessionRec);
-        if (system_running == 0) {
-            break; 
-        }
+        handlecommand(cmd,*currentUser, user_status, sessionRec);
     }
     logoutannounce();
 }
@@ -53,8 +50,7 @@ void runATM()
         
         if (login_status == 1 && currentUser != nullptr)
         {
-            int dummy_system = 1; 
-            RunUserSession(currentUser, dummy_system, sessionRec);
+            RunUserSession(currentUser, sessionRec);
         }
         else if (login_status == -1)
         {

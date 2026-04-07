@@ -1,7 +1,6 @@
 #include "Data.h"
 #include "datahandler.h"
 #include "UI.h"
-#include <stdio.h>
 #include <fstream>
 #include <string>
 #include <sstream>

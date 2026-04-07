@@ -8,7 +8,7 @@
 #include <iomanip>
 using namespace std;
 
-void handlecommand(const string &cmd, int &running, User &current, int &user_status, SessionRecord *&Record)
+void handlecommand(const string &cmd,User &current, int &user_status, SessionRecord *&Record)
 {
     if (cmd == "1") // Deposit - gui tien 
         transaction(current, deposit, 'd', Record);
@@ -27,10 +27,6 @@ void handlecommand(const string &cmd, int &running, User &current, int &user_sta
     }
 }
 
-void shutdown(int &running)
-{
-    running = 0;
-}
 void ShowHistory(User &U)
 {
     const int width = 100;
