@@ -55,9 +55,28 @@ void runATM()
             RunUserSession(currentUser, sessionRec);
         }
         else if (login_status == -1)
-        {
-            // secret IT session for shutdown
-            atm_running = 0;
+        {   drawManagerBox();
+            while(1){ 
+                string cmd;
+                cout << "\nSelect Option: ";
+                if (!(cin >> cmd))
+                {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                continue;
+                }
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                if (cmd == "1") // shutdown
+                {
+                    atm_running = 0;break;
+                }
+                else if (cmd == "2") break;
+                else
+                {
+                    cout << "Invalid Option." << endl;
+                    delay(3);
+                }
+            }
         }
     }
     clearScreen();

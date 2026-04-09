@@ -10,7 +10,7 @@ using namespace std;
 
 int LoadData(UserList* &accounts)
 {
-    ifstream ATMDATA("DATA/user.dat");
+    ifstream ATMDATA("Data/user.dat");
     if (!ATMDATA) return 0;
 
     string line;
@@ -53,7 +53,7 @@ int LoadData(UserList* &accounts)
 
 int SaveData(UserList* accounts)
 {
-    ofstream ATMDATA("DATA/user.dat", ios::out | ios::trunc);
+    ofstream ATMDATA("Data/user.dat", ios::out | ios::trunc);
     if (!ATMDATA) return 0;
     
     UserList* current = accounts;

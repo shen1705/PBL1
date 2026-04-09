@@ -185,6 +185,14 @@ void drawUserBox(int accnum, double balance, int maxtrans)
     drawFrameTextLine(cout, "4. Log out - Dang xuat");
     drawFrameBottom(cout);
 }
+void drawManagerBox(){
+    clearScreen();
+    drawTitle(cout,"MANAGEMENT SESSION");
+    drawDivider(cout,FRAME_WIDTH,'-');
+    drawFrameTextLine(cout,"1.Shutdown- Tat may");
+    drawFrameTextLine(cout,"2.Exit - Tro lai chuong trinh");
+    drawFrameBottom(cout);
+}
 
 void showMessageAndDelay()
 {
