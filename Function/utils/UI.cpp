@@ -189,7 +189,7 @@ void drawManagerBox(){
     clearScreen();
     drawTitle(cout,"MANAGEMENT SESSION");
     drawDivider(cout,FRAME_WIDTH,'-');
-    drawFrameTextLine(cout,"1.Shutdown- Tat may");
+    drawFrameTextLine(cout,"1.Shutdown - Tat may");
     drawFrameTextLine(cout,"2.Exit - Tro lai chuong trinh");
     drawFrameBottom(cout);
 }
@@ -220,4 +220,5 @@ void shutdownAnnounce()
         cout << "Shutting down in " << i << endl;
         delay(1);
     }
+    cout<<"Shutdown"
 }
