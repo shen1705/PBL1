@@ -220,5 +220,5 @@ void shutdownAnnounce()
         cout << "Shutting down in " << i << endl;
         delay(1);
     }
-    cout<<"Shutdown"
+    cout<<"Shutdown";
 }

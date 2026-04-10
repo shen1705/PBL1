@@ -15,13 +15,13 @@ struct SessionRecord
     char type;
 };
 
-struct User //Người dùng
+struct User 
 {
-    int accnum=-1;//account number
-    int PIN=0;//PIN
-    double balance=0.0;//account balance
-    int maxtrans=5;// max transitions
-    TransactionList *List;// transactions history
+    int accnum=-1;
+    int PIN=0;
+    double balance=0.0;
+    int maxtrans=5;
+    TransactionList *List;
 };
 
 struct UserList 

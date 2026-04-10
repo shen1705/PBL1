@@ -10,8 +10,89 @@
 
 using namespace std;
 
-// Customer Session (LOGIN)
-void RunUserSession(User *currentUser, SessionRecord *&sessionRec)
+
+static UserList *accounts = nullptr;
+static SessionRecord *sessionRec = nullptr;
+static User *currentUser = nullptr;
+static bool atm_running = false;
+
+
+bool SystemStart()
+{
+    clearScreen();
+    drawProjectIntro();
+    cout << "=== SYSTEM BOOTING ===" << endl;
+
+    // IT Auth
+    if (!ITauth())
+    {
+        cout << "Fatal Error: IT Authentication Failed. Shutting down..." << endl;
+        delay(3);
+        return false; 
+    }
+
+    // Load Data
+    if (!LoadData(accounts))
+    {
+        cout << "Can't load data from file!" << endl;
+        delay(2);
+        return false;
+    }
+
+    atm_running = true;
+    return true;
+}
+
+bool IsSystemRunning()
+{
+    return atm_running;
+}
+
+bool SystemLogin()
+{
+    int login_status = Login(accounts, currentUser);
+
+    if (login_status == 1 && currentUser != nullptr) 
+    {
+        return true; 
+    }
+    else if (login_status == -1)
+    {   
+      
+        drawManagerBox();
+        while(1)
+        { 
+            string cmd;
+            cout << "\nSelect Option: ";
+            if (!(cin >> cmd))
+            {
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                continue;
+            }
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            
+            if (cmd == "1") // Shutdown
+            {
+                atm_running = false;
+                break;
+            }
+            else if (cmd == "2") 
+            {
+                break; 
+            }
+            else
+            {
+                cout << "Invalid Option." << endl;
+                delay(3);
+            }
+        }
+        return false;
+    }
+    return false; 
+}
+
+void RunUserSession()
 {
     int user_status = 1;
     while (user_status)
@@ -26,72 +107,34 @@ void RunUserSession(User *currentUser, SessionRecord *&sessionRec)
             continue;
         }
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        
         handlecommand(cmd, *currentUser, user_status, sessionRec);
     }
-    logoutannounce();
 }
 
-void runATM()
+void SystemLogout()
 {
-    UserList *accounts = nullptr;
-    if (!LoadData(accounts))
-    {
-        cout << "Can't load data from file!" << endl;
-        delay(2);
-        return;
-    }
-    SessionRecord *sessionRec = nullptr;
-    int atm_running = 1;
-    User *currentUser = nullptr;
+    logoutannounce();
+    currentUser = nullptr;
+}
 
-    // system running
-    while (atm_running)
-    {
-        int login_status = Login(accounts, currentUser);
-
-        if (login_status == 1 && currentUser != nullptr) // log in
-        {
-            // user session
-            RunUserSession(currentUser, sessionRec);
-        }
-        else if (login_status == -1)
-        {   drawManagerBox();
-            while(1){ 
-                string cmd;
-                cout << "\nSelect Option: ";
-                if (!(cin >> cmd))
-                {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                continue;
-                }
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                if (cmd == "1") // shutdown
-                {
-                    atm_running = 0;break;
-                }
-                else if (cmd == "2") break;
-                else
-                {
-                    cout << "Invalid Option." << endl;
-                    delay(3);
-                }
-            }
-        }
-    }
+void SystemShutdown()
+{
     clearScreen();
     cout << "[SYSTEM] LUU DU LIEU NGUOI DUNG..." << endl;
-    SaveData(accounts); // save data cua user
+    SaveData(accounts);
     delay(1);
     cout << "Luu du lieu nguoi dung thanh cong." << endl;
+    
     delay(1);
     cout << ">> Dang luu lich su giao dich..." << endl;
-    Record(sessionRec); // save lich su giao dich cua atm
+    Record(sessionRec);
     cout << "Luu lich su giao dich thanh cong." << endl;
+    
     delay(1);
-    shutdownAnnounce(); // UI
+    shutdownAnnounce();
 
-    // free
+    
     UserList *current = accounts;
     while (current != nullptr)
     {
@@ -101,6 +144,8 @@ void runATM()
         delete temp;
     }
     accounts = nullptr;
+    
+    
     SessionRecord *currentSession = sessionRec;
     while (currentSession != nullptr)
     {
@@ -109,22 +154,4 @@ void runATM()
         delete tempSession;
     }
     sessionRec = nullptr;
-}
-
-void BootSystem()
-{
-    clearScreen();
-    drawProjectIntro();
-    cout << "=== SYSTEM BOOTING ===" << endl;
-
-    // it auth
-    if (!ITauth())
-    {
-        cout << "Fatal Error: IT Authentication Failed. Shutting down..." << endl;
-        delay(3);
-        return; // exit
-    }
-
-    // run atm sau khi xac minh
-    runATM();
 }

@@ -1,8 +1,19 @@
 #include "atm_control.h"
-#include "auth.h"
-#include <iostream>
 
-int main() {
-    BootSystem();
+int main() 
+{
+    if (!SystemStart()) {
+        return 1;
+    }
+    while (IsSystemRunning()) 
+    { 
+        if (SystemLogin()) 
+        {
+            RunUserSession(); 
+            SystemLogout(); 
+        }
+    }
+    SystemShutdown(); 
+    
     return 0;
 }
