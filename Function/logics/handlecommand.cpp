@@ -8,11 +8,11 @@
 #include <iomanip>
 using namespace std;
 
-void handlecommand(const string &cmd,User &current, int &user_status, SessionRecord *&Record)
+void handlecommand(const string &cmd, User &current, int &user_status, SessionRecord *&Record)
 {
-    if (cmd == "1") // Deposit - gui tien 
+    if (cmd == "1") // Deposit - gui tien
         transaction(current, deposit, 'd', Record);
-    else if (cmd == "2") //Withdraw - rut tien
+    else if (cmd == "2") // Withdraw - rut tien
         transaction(current, withdraw, 'w', Record);
     else if (cmd == "3") // Show History
         ShowHistory(current);
@@ -68,6 +68,11 @@ void ShowHistory(User &U)
 
 int withdraw(User &U, double amount)
 {
+    if (amount <= 0)
+    {
+        cout << "So tien phai lon hon 0!" << endl;
+        return 0;
+    }
     if (U.balance >= amount)
     {
         U.balance -= amount;
@@ -82,7 +87,11 @@ int withdraw(User &U, double amount)
 }
 
 int deposit(User &U, double amount)
-{
+{   if (amount <= 0) 
+    {
+        cout << "So tien phai lon hon 0!" << endl;
+        return 0;
+    }
     U.balance += amount;
     cout << "deposit successfully. " << U.balance << endl;
     return 1;
@@ -115,7 +124,7 @@ void transaction(User &U, int (*type)(User &, double), const char transtype, Ses
             {
                 TransUpdt(U, amount, 'd');
             }
-            TransRecord(U, amount, Record,transtype);
+            TransRecord(U, amount, Record, transtype);
             U.maxtrans--;
             showMessageAndDelay();
             clearScreen();
@@ -140,7 +149,7 @@ void TransUpdt(User &U, double amount, char type)
     newNode->next = U.List;
     U.List = newNode;
 }
-void TransRecord(User &U, double amount, SessionRecord *&Record,char type)
+void TransRecord(User &U, double amount, SessionRecord *&Record, char type)
 {
     SessionRecord *newNode = new SessionRecord;
     newNode->accnum = U.accnum;
